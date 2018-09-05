@@ -56,7 +56,7 @@ class InstallPackage implements ShouldQueue
         } catch (\Exception $e) {
             $error = implode(', ', [$e->getMessage(), $e->getFile(), $e->getLine()]);
 
-            $status->terminateForError($error);
+            $status->terminateForError("****** ERROR: " . $error . "******");
 
             logger($error);
         }

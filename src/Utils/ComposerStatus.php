@@ -22,13 +22,14 @@ class ComposerStatus
 
     public function startInstalling($package, $packageName, $key = null)
     {
+        $this->reset();
+
         $this->cache->put('nova-installer.is_running', true, 10);
         $this->cache->put('nova-installer.has_errors', false, 10);
         $this->cache->put('nova-installer.finished_installation', false, 10);
         $this->cache->put('nova-installer.log', null, 10);
         $this->cache->put('nova-installer.package', $package, 10);
         $this->cache->put('nova-installer.packageName', $packageName, 10);
-        $this->cache->put('nova-installer.packageKey', $key, 10);
         $this->cache->put('nova-installer.needs_configuration', true, 10);
 
         return $this->show();
@@ -62,7 +63,6 @@ class ComposerStatus
             'finished_installation' => $this->cache->get('nova-installer.finished_installation', false),
             'log' => $this->cache->get('nova-installer.log', null),
             'package' => $this->cache->get('nova-installer.package', null),
-            'packageKey' => $this->cache->get('nova-installer.packageKey', null),
             'packageName' => $this->cache->get('nova-installer.packageName', null),
             'needs_configuration' => $this->cache->get('nova-installer.needs_configuration', false),
             'extras' => $this->cache->get('nova-installer.extras', []),
@@ -72,9 +72,10 @@ class ComposerStatus
     public function reset()
     {
         $this->cache->put('nova-installer.is_running', false, 10);
+        $this->cache->put('nova-installer.has_errors', false, 10);
         $this->cache->put('nova-installer.finished_installation', false, 10);
         $this->cache->put('nova-installer.package', null, 10);
-        $this->cache->put('nova-installer.packageKey', null, 10);
+        $this->cache->put('nova-installer.packageName', null, 10);
         $this->cache->put('nova-installer.needs_configuration', false, 10);
         $this->cache->put('nova-installer.extras', [], 10);
         $this->cache->put('nova-installer.log', null, 10);

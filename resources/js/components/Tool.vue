@@ -25,7 +25,7 @@
 
                                 <span v-if="isInstalled(package)"  class="text-success mt-3 mb-2 font-bold">Installed</span>
                                 <button
-                                        @click="installPackage(package)"
+                                        @click="show(package)"
                                         :class="{'btn-disabled': isInstalling}"
                                         :disabled="isInstalling"
                                         class="btn btn-default btn-primary justify-self-end" v-else>
@@ -37,6 +37,16 @@
             </div>
         </div>
         <InstalledPackages :installedPackages="installedPackages" />
+
+        <package-modal
+            v-if="showingPackage"
+            @close="showingPackage = null"
+            :selectedPackage="showingPackage"
+            :isInstalling="isInstalling"
+            :installingPackage="installingPackage"
+            :console="composerStatus.log"
+            :installedPackages="installedPackages"
+        />
     </div>
 </template>
 
@@ -55,6 +65,7 @@ export default {
             searchText: null,
             isInstalling: false,
             installingPackage: null,
+            showingPackage: null,
             availablePackages: [],
             installedPackages: [],
             composerStatus: []
@@ -63,7 +74,7 @@ export default {
 
     methods: {
         searchPackages() {
-            axios.get(`/nova-vendor/beyondcode/nova-installer/packages/search?q=${this.searchText}`)
+            Nova.request().get(`/nova-vendor/beyondcode/nova-installer/packages/search?q=${this.searchText}`)
                 .then(({data}) => {
                     this.availablePackages = data.data;
                 });
@@ -86,12 +97,17 @@ export default {
             this.installingPackage = selectedPackage.composer_name;
             this.$toasted.show(`Installing "${selectedPackage.name}"`, { type: 'info', duration: 0 });
 
-            axios.post('/nova-vendor/beyondcode/nova-installer/install', {
+            Nova.request().post('/nova-vendor/beyondcode/nova-installer/install', {
                 package: selectedPackage.composer_name,
                 packageName: selectedPackage.name
             });
 
             this.startPolling();
+        },
+
+        show(selectedPackage) {
+            // console.log(selectedPackage)
+            this.showingPackage = selectedPackage
         },
 
         startPolling() {
@@ -110,7 +126,7 @@ export default {
 
         status(){
 
-            axios.get('/nova-vendor/beyondcode/nova-installer/composer-status')
+            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status')
             .then((response) => {
 
                 this.composerStatus = response.data
@@ -131,6 +147,8 @@ export default {
 
                         this.clearNotificationsAfter(2000)
                         this.$toasted.show(`Successfully installed ${this.installingPackage}.`, { type: 'success' });
+
+                        this.resetComposerStatus();
 
                     }
 
@@ -167,7 +185,7 @@ export default {
         },
 
         initialStatusCheck(){
-            axios.get('/nova-vendor/beyondcode/nova-installer/composer-status')
+            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status')
             .then((response) => {
 
                 this.composerStatus = response.data
@@ -185,6 +203,10 @@ export default {
             })
         },
 
+        resetComposerStatus(){
+            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status-reset');
+        },
+
         isInstalled(currentPackage) {
 
             return this.installedPackages.map(function(i) { return i.name; }).includes(currentPackage.composer_name);
@@ -197,6 +219,8 @@ export default {
         this.fetchRecent();
         this.fetchInstalled();
         this.initialStatusCheck();
+
+        Nova.$on('installation-requested', payload => this.installPackage(payload.requestedPackage))
     },
 }
 </script>
