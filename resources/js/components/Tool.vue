@@ -204,7 +204,9 @@ export default {
         },
 
         resetComposerStatus(){
-            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status-reset');
+            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status-reset').then(() => {
+                //
+            });
         },
 
         isInstalled(currentPackage) {

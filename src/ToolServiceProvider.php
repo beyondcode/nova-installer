@@ -2,8 +2,6 @@
 
 namespace Beyondcode\NovaInstaller;
 
-use Laravel\Nova\Nova;
-use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Beyondcode\NovaInstaller\Http\Middleware\Authorize;
@@ -48,6 +46,9 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            \Beyondcode\NovaInstaller\Utils\Manipulation\Manipulator::class,
+            \Beyondcode\NovaInstaller\Utils\Manipulation\Ast\AstStyleManipulator::class
+        );
     }
 }

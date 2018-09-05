@@ -18,7 +18,7 @@ class NovaPackagesFinder
 
     protected $keyword = 'nova';
 
-    public function getExtraForPackage($package)
+    public function getConfig($package)
     {
         return collect(optional(Composed\package($package, true))->getConfig());
     }
@@ -33,6 +33,7 @@ class NovaPackagesFinder
             return $this->compactAuthorNames($package);
         })->toArray();
     }
+
     private function getAllInstalledPackages()
     {
         return collect(Composed\packages());

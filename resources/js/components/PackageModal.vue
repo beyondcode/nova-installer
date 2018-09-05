@@ -50,7 +50,12 @@ export default {
     data() {
         return {
             console: '',
-            installed: this.isInstalled(),
+        }
+    },
+
+    computed: {
+        installed() {
+            return this.installedPackages.map(function(i) { return i.name; }).includes(this.selectedPackage.composer_name);
         }
     },
 
@@ -58,12 +63,6 @@ export default {
     methods: {
         close() {
             this.$emit('close')
-        },
-
-        isInstalled() {
-
-            return this.installedPackages.map(function(i) { return i.name; }).includes(this.selectedPackage.composer_name);
-
         },
 
         requestInstallation() {

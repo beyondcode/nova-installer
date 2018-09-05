@@ -1,6 +1,6 @@
 <?php
 
-namespace Beyondcode\NovaInstaller\Utils;
+namespace Beyondcode\NovaInstaller\Utils\Manipulation\Ast;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;

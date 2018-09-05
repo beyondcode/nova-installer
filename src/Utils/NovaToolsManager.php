@@ -6,12 +6,26 @@ use GuzzleHttp\Client;
 use Laravel\Nova\Nova;
 use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Contracts\Encryption\Encrypter;
+use Beyondcode\NovaInstaller\Utils\Manipulation\ServiceProviderManipulator;
 
 class NovaToolsManager
 {
-    public $newPackage;
+    protected $newPackage;
     protected $scripts;
     protected $styles;
+    protected $serviceProviderManipulator;
+
+    protected $serviceProvider = \App\Providers\NovaServiceProvider::class;
+
+    public function __construct(ServiceProviderManipulator $serviceProviderManipulator)
+    {
+        $this->serviceProviderManipulator = $serviceProviderManipulator;
+    }
+
+    public function setPackage($package)
+    {
+        $this->newPackage = $package;
+    }
 
     public function getCurrentTools()
     {
@@ -26,31 +40,27 @@ class NovaToolsManager
         return $tools;
     }
 
-    public function getNewToolsScriptsAndStyles($url, $cookies, $tools)
-    {
-        $updatedTools = $this->getUpdatedTools($url, $cookies);
-
-        $newTools = collect($updatedTools->tools)->diff($tools)->toArray();
-        $newScripts = collect($updatedTools->scripts)->diff($this->scripts)->toArray();
-        $newStyles = collect($updatedTools->styles)->diff($this->styles)->toArray();
-
-        return [
-            'tools' => $newTools,
-            'scripts' => $newScripts,
-            'styles' => $newStyles
-        ];
-    }
-
     protected function populateScriptsAndStyles()
     {
         $this->scripts = Nova::$scripts;
         $this->styles = Nova::$styles;
     }
 
+    public function getNewToolsScriptsAndStyles($url, $cookies, $tools)
+    {
+        $updatedTools = $this->getUpdatedTools($url, $cookies);
+
+        return [
+            'tools' => collect($updatedTools->tools)->diff($tools)->toArray(),
+            'scripts' => collect($updatedTools->scripts)->diff($this->scripts)->toArray(),
+            'styles' => collect($updatedTools->styles)->diff($this->styles)->toArray()
+        ];
+    }
+
     protected function registerTools()
     {
-        $manipulator = new \Beyondcode\NovaInstaller\ServiceProviderManipulator($this->newPackage);
-        $manipulator->manipulate(\App\Providers\NovaServiceProvider::class);
+        $this->serviceProviderManipulator->setPackage($this->newPackage);
+        $this->serviceProviderManipulator->manipulate($this->serviceProvider);
     }
 
     protected function getUpdatedTools($url, $cookies)

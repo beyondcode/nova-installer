@@ -37,12 +37,12 @@ class InstallPackage implements ShouldQueue
      *
      * @return void
      */
-    public function handle(NovaToolsManager $toolsManager, ComposerStatus $status, Composer $composer)
+    public function handle(ComposerStatus $status, NovaToolsManager $toolsManager, Composer $composer)
     {
         try {
-            $toolsManager->newPackage = $this->package;
-
             $status->startInstalling($this->package, $this->packageName);
+
+            $toolsManager->setPackage($this->package);
 
             $tools = $toolsManager->getCurrentTools();
 
@@ -50,15 +50,15 @@ class InstallPackage implements ShouldQueue
                 $status->log($data);
             });
 
-            $extras = $toolsManager->getNewToolsScriptsAndStyles($this->url, $this->cookies, $tools);
-
-            $status->finishInstalling($extras);
+            $status->finishInstalling(
+                $toolsManager->getNewToolsScriptsAndStyles(
+                    $this->url,
+                    $this->cookies,
+                    $tools
+                )
+            );
         } catch (\Exception $e) {
-            $error = implode(', ', [$e->getMessage(), $e->getFile(), $e->getLine()]);
-
-            $status->terminateForError("****** ERROR: " . $error . "******");
-
-            logger($error);
+            $status->terminateForError($e);
         }
     }
 }

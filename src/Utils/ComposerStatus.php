@@ -46,8 +46,13 @@ class ComposerStatus
         return $this->show();
     }
 
-    public function terminateForError($message)
+    public function terminateForError($e)
     {
+        $message = "****** ERROR: " . implode(', ', [
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine()]) . "******";
+
         $this->finishInstalling();
         $this->cache->put('nova-installer.has_errors', true, 10);
         $this->log($message);
