@@ -39,7 +39,6 @@ class InstallPackage implements ShouldQueue
      */
     public function handle(NovaToolsManager $toolsManager, ComposerStatus $status, Composer $composer)
     {
-        logger($this->url);
         try {
             $toolsManager->newPackage = $this->package;
 

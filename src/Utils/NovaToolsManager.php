@@ -57,9 +57,6 @@ class NovaToolsManager
     {
         $this->registerTools();
 
-        logger('updatedTools');
-        logger($url);
-
         $encrypter = app(Encrypter::class);
 
         $client = new Client([

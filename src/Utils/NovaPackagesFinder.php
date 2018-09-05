@@ -20,7 +20,7 @@ class NovaPackagesFinder
 
     public function getExtraForPackage($package)
     {
-        return collect(Composed\package($package)->getConfig());
+        return collect(optional(Composed\package($package, true))->getConfig());
     }
 
     public function all()
