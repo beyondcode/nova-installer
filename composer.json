@@ -1,14 +1,29 @@
 {
     "name": "beyondcode/nova-installer",
-    "description": "A Laravel Nova tool.",
+    "description": "The Nova Package Installer.",
     "keywords": [
         "laravel",
         "nova"
     ],
     "license": "MIT",
+    "homepage": "https://github.com/beyondcode/nova-installer",
+    "authors": [
+        {
+            "name": "Marcel Pociot",
+            "email": "m.pociot@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Sidrit Trandafili",
+            "email": "forge405@gmail.com",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": ">=7.1.0",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "joshdifabio/composed": "^1.0",
+        "nikic/php-parser": "^4.0"
     },
     "autoload": {
         "psr-4": {
