@@ -38,26 +38,33 @@
         </div>
         <InstalledPackages :installedPackages="installedPackages" />
 
-        <package-modal
-            v-if="showingPackage"
-            @close="showingPackage = null"
-            :selectedPackage="showingPackage"
-            :isInstalling="isInstalling"
-            :installingPackage="installingPackage"
-            :console="composerStatus.log"
-            :installedPackages="installedPackages"
-        />
+
+        <portal to="modals">
+            <transition name="fade">
+                <PackageModal
+                    v-if="showingPackage"
+                    @close="showingPackage = null"
+                    :selectedPackage="showingPackage"
+                    :isInstalling="isInstalling"
+                    :installingPackage="installingPackage"
+                    :console="composerStatus.log"
+                    :installedPackages="installedPackages"
+                />
+            </transition>
+        </portal>
     </div>
 </template>
 
 <script>
 
 import InstalledPackages from './InstalledPackages';
+import PackageModal from './PackageModal';
 
 export default {
 
     components: {
-        InstalledPackages
+        InstalledPackages,
+        PackageModal
     },
 
     data() {

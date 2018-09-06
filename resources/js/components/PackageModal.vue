@@ -1,12 +1,17 @@
 <template>
-    <modal @modal-close="close">
-        <div class="containerTty rounded shadow max-w-full max-h-screen overflow-y-scroll" style="width: calc(200vh - 16rem); height: calc(110vh - 16rem);">
-                <div class="mb-1 absolute pin-t bg-white p-4 z-50 border-b w-full">
-                    <h1>{{ selectedPackage.name }}</h1>
+    <modal 
+        class="modal"
+        tabindex="-1"
+        role="dialog"
+        @modal-close="close"
+    >
+        <div class="containerTty rounded-lg shadow overflow-y-scroll" style="max-height: 80vh; width: 80vw;">
+                <div class="mb-1 sticky items-center pin-t bg-white p-4 z-50 border-b w-full">
+                    <h1 class="py-2">{{ selectedPackage.name }}</h1>
                     <p v-html="selectedPackage.abstract"></p>
                 </div>
 
-                <div class="mb-4 text-xs pt-auto description" v-if="!isInstalling">
+                <div class="mb-4 text-xs pt-auto p-4" v-if="!isInstalling">
                     <p v-html="selectedPackage.description_html"></p>
                     <p v-html="selectedPackage.instructions_html"></p>
                 </div>
@@ -20,12 +25,12 @@
                     </div>
                 </div>
 
-            <div class="bg-white flex text-sm border-t px-6 py-4 items-center absolute pin-b w-full">
+            <div class="bg-white flex text-sm border-t px-6 py-4 items-center sticky pin-b w-full">
                 <p class="flex-grow text-indigo font-bold no-underline uppercase text-xs hover:text-indigo-dark">{{ selectedPackage.author.name }}</p>
 
                 <button v-if="!isInstalling"
                         @click="close"
-                        class="btn btn-default btn-danger ">Close
+                        class="mr-2 btn btn-default btn-danger ">Close
                 </button>
 
                 <span v-if="installed"  class="text-success mt-1 ml-4 font-bold">Installed</span>
@@ -77,14 +82,6 @@ export default {
     .console{
         margin-top: 6%;
         transition: height 0.5s linear;
-    }
-
-    .description{
-        transition: height 0.5s linear;
-        margin-top: 7%;
-        margin-bottom: 7%;
-        margin-left: 2%;
-        margin-right: 2%;
     }
 
 </style>
