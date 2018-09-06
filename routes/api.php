@@ -16,5 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::any('/install', 'InstallerController@install');
 Route::get('/tools', 'InstallerController@tools');
 
+Route::get('/composer-status', 'InstallationStatusController@show');
+Route::get('/composer-status-reset', 'InstallationStatusController@reset');
+
 Route::get('/packages/search', 'NovaPackagesController@search');
 Route::get('/packages/recent', 'NovaPackagesController@recent');
+Route::get('/packages/popular', 'NovaPackagesController@popular');
+Route::get('/packages/installed', 'NovaPackagesController@installed');
