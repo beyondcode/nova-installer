@@ -798,7 +798,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Scoped Styles */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Scoped Styles */\n", ""]);
 
 // exports
 
@@ -819,7 +819,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-//
 //
 //
 //
@@ -1088,8 +1087,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             });
         },
         resetComposerStatus: function resetComposerStatus() {
-            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status-reset').then(function () {
-                //
+            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status-reset').then(function (response) {
+                // this.composerStatus = response.data
             });
         },
         isInstalled: function isInstalled(currentPackage) {
@@ -2339,11 +2338,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['selectedPackage', 'isInstalling', 'installingPackage', 'console', 'installedPackages', 'hasInstallationErrors', 'isInstallationCompleted'],
+    props: ['selectedPackage', 'isInstalling', 'installingPackage', 'console', 'installedPackages', 'hasInstallationErrors'],
 
     data: function data() {
         return {
-            console: ''
+            console: '',
+            hasHadErrors: false
         };
     },
 
@@ -2355,17 +2355,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).includes(this.selectedPackage.composer_name);
         },
         showConsole: function showConsole() {
-            return this.isInstalling || this.hasInstallationErrors && this.isInstallationCompleted;
+            return this.isInstalling || this.hasHadErrors;
         },
         showDescriptions: function showDescriptions() {
             return !this.showConsole;
         }
     },
 
-    watchers: {
+    watch: {
         console: function console(newInput, oldInput) {
             var console = document.getElementById("console");
             window.scrollTo(0, console.innerHeight);
+        },
+
+        hasInstallationErrors: function hasInstallationErrors(newValue, oldValue) {
+            this.hasHadErrors = !oldValue && newValue ? true : false;
         }
     },
 
@@ -2712,8 +2716,6 @@ var render = function() {
                       installingPackage: _vm.installingPackage,
                       console: _vm.console,
                       hasInstallationErrors: _vm.composerStatus.has_errors,
-                      isInstallationCompleted:
-                        _vm.composerStatus.finished_installation,
                       installedPackages: _vm.installedPackages
                     },
                     on: {

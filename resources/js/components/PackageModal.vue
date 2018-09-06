@@ -57,12 +57,12 @@ export default {
         'console',
         'installedPackages',
         'hasInstallationErrors',
-        'isInstallationCompleted',
     ],
 
     data() {
         return {
             console: '',
+            hasHadErrors: false
         }
     },
 
@@ -72,7 +72,7 @@ export default {
         },
 
         showConsole() {
-            return this.isInstalling || (this.hasInstallationErrors && this.isInstallationCompleted)
+            return this.isInstalling || this.hasHadErrors
         },
 
         showDescriptions() {
@@ -80,10 +80,14 @@ export default {
         }
     },
 
-    watchers: {
+    watch: {
         console: function(newInput, oldInput){
             var console = document.getElementById("console");
             window.scrollTo(0, console.innerHeight);
+        },
+
+        hasInstallationErrors: function(newValue, oldValue){
+            this.hasHadErrors = (!oldValue && newValue) ? true : false
         }
     },
 

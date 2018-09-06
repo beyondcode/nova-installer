@@ -105,7 +105,6 @@ class ComposerStatus
      */
     public function show()
     {
-        // return $this->cache->get($this->cacheName);
         return [
             'is_running' => $this->get('is_running', false),
             'has_errors' => $this->get('has_errors', false),
@@ -120,11 +119,13 @@ class ComposerStatus
     /**
      * Bust the current composer cache.
      *
-     * @return void
+     * @return array
      */
     public function reset()
     {
         $this->cache->flush();
+
+        return $this->show();
     }
 
     /**

@@ -49,7 +49,6 @@
                     :installingPackage="installingPackage"
                     :console="console"
                     :hasInstallationErrors="composerStatus.has_errors"
-                    :isInstallationCompleted="composerStatus.finished_installation"
                     :installedPackages="installedPackages"
                 />
             </transition>
@@ -222,8 +221,8 @@ export default {
         },
 
         resetComposerStatus(){
-            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status-reset').then(() => {
-                //
+            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status-reset').then((response) => {
+                // this.composerStatus = response.data
             });
         },
 
