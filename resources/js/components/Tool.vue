@@ -231,6 +231,10 @@ export default {
 
         Nova.$on('installation-requested', payload => this.installPackage(payload.requestedPackage))
     },
+
+    beforeDestroy() {
+        Nova.$off('installation-requested');
+    }
 }
 </script>
 

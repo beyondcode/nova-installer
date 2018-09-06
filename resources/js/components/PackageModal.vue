@@ -16,11 +16,11 @@
                     <p v-html="selectedPackage.instructions_html"></p>
                 </div>
 
-                <div class="relative overflow-y-scroll h-full console" v-if="isInstalling">
-                    <div class="overflow-y-auto h-full" style="background-color: black;">
+                <div class="relative overflow-y-scroll h-full w-full bg-90" v-if="isInstalling" style="min-height: 200px;">
+                    <div class="overflow-y-auto h-full w-full">
                         <pre
                             v-html="console"
-                            class="p-4 font-mono text-white text-left leading-loose text-sm"
+                            class="p-4 w-full font-mono text-white text-left leading-loose text-sm"
                         ></pre>
                     </div>
                 </div>
@@ -77,11 +77,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    .console{
-        margin-top: 6%;
-        transition: height 0.5s linear;
-    }
-
-</style>

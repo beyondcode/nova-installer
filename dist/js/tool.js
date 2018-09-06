@@ -802,7 +802,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Scoped Styles */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Scoped Styles */\n", ""]);
 
 // exports
 
@@ -1100,6 +1100,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         Nova.$on('installation-requested', function (payload) {
             return _this6.installPackage(payload.requestedPackage);
         });
+    },
+    beforeDestroy: function beforeDestroy() {
+        Nova.$off('installation-requested');
     }
 });
 
@@ -2119,21 +2122,17 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(51)
-}
 var normalizeComponent = __webpack_require__(4)
 /* script */
 var __vue_script__ = __webpack_require__(53)
 /* template */
-var __vue_template__ = __webpack_require__(54)
+var __vue_template__ = __webpack_require__(60)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
-var __vue_scopeId__ = "data-v-5c5caa72"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -2166,46 +2165,8 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(52);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("52e6cf24", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5c5caa72\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PackageModal.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5c5caa72\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PackageModal.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.console[data-v-5c5caa72]{\n    margin-top: 6%;\n    -webkit-transition: height 0.5s linear;\n    transition: height 0.5s linear;\n}\n\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 51 */,
+/* 52 */,
 /* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2291,163 +2252,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "modal",
-    {
-      staticClass: "modal",
-      attrs: { tabindex: "-1", role: "dialog" },
-      on: { "modal-close": _vm.close }
-    },
-    [
-      _c(
-        "div",
-        {
-          staticClass: "containerTty rounded-lg shadow overflow-y-scroll",
-          staticStyle: { "max-height": "80vh", width: "80vw" }
-        },
-        [
-          _c(
-            "div",
-            {
-              staticClass:
-                "mb-1 sticky items-center pin-t bg-white p-4 z-50 border-b w-full"
-            },
-            [
-              _c("h1", { staticClass: "py-2" }, [
-                _vm._v(_vm._s(_vm.selectedPackage.name))
-              ]),
-              _vm._v(" "),
-              _c("p", {
-                domProps: { innerHTML: _vm._s(_vm.selectedPackage.abstract) }
-              })
-            ]
-          ),
-          _vm._v(" "),
-          !_vm.isInstalling
-            ? _c("div", { staticClass: "mb-4 text-xs pt-auto p-4" }, [
-                _c("p", {
-                  domProps: {
-                    innerHTML: _vm._s(_vm.selectedPackage.description_html)
-                  }
-                }),
-                _vm._v(" "),
-                _c("p", {
-                  domProps: {
-                    innerHTML: _vm._s(_vm.selectedPackage.instructions_html)
-                  }
-                })
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.isInstalling
-            ? _c(
-                "div",
-                { staticClass: "relative overflow-y-scroll h-full console" },
-                [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "overflow-y-auto h-full",
-                      staticStyle: { "background-color": "black" }
-                    },
-                    [
-                      _c("pre", {
-                        staticClass:
-                          "p-4 font-mono text-white text-left leading-loose text-sm",
-                        domProps: { innerHTML: _vm._s(_vm.console) }
-                      })
-                    ]
-                  )
-                ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass:
-                "bg-white flex text-sm border-t px-6 py-4 items-center sticky pin-b w-full"
-            },
-            [
-              _c(
-                "p",
-                {
-                  staticClass:
-                    "flex-grow text-indigo font-bold no-underline uppercase text-xs hover:text-indigo-dark"
-                },
-                [_vm._v(_vm._s(_vm.selectedPackage.author.name))]
-              ),
-              _vm._v(" "),
-              !_vm.isInstalling
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "mr-2 btn btn-default btn-danger ",
-                      on: { click: _vm.close }
-                    },
-                    [_vm._v("Close\n            ")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.installed
-                ? _c(
-                    "span",
-                    { staticClass: "text-success mt-1 ml-4 font-bold" },
-                    [_vm._v("Installed")]
-                  )
-                : _c(
-                    "button",
-                    {
-                      staticClass:
-                        "btn btn-default btn-primary justify-self-end",
-                      class: { "btn-disabled": _vm.isInstalling },
-                      attrs: { disabled: _vm.isInstalling },
-                      on: {
-                        click: function($event) {
-                          _vm.requestInstallation(_vm.package)
-                        }
-                      }
-                    },
-                    [
-                      _vm.isInstalling &&
-                      _vm.installingPackage ===
-                        _vm.selectedPackage.composer_name
-                        ? _c("loader", { staticClass: "text-60" })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !_vm.isInstalling ||
-                      _vm.installingPackage !==
-                        _vm.selectedPackage.composer_name
-                        ? _c("span", [_vm._v("Confirm Install")])
-                        : _vm._e()
-                    ],
-                    1
-                  )
-            ]
-          )
-        ]
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-5c5caa72", module.exports)
-  }
-}
-
-/***/ }),
+/* 54 */,
 /* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2778,6 +2583,159 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-dee5efa8", module.exports)
+  }
+}
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "modal",
+    {
+      staticClass: "modal",
+      attrs: { tabindex: "-1", role: "dialog" },
+      on: { "modal-close": _vm.close }
+    },
+    [
+      _c(
+        "div",
+        {
+          staticClass: "containerTty rounded-lg shadow overflow-y-scroll",
+          staticStyle: { "max-height": "80vh", width: "80vw" }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass:
+                "mb-1 sticky items-center pin-t bg-white p-4 z-50 border-b w-full"
+            },
+            [
+              _c("h1", { staticClass: "py-2" }, [
+                _vm._v(_vm._s(_vm.selectedPackage.name))
+              ]),
+              _vm._v(" "),
+              _c("p", {
+                domProps: { innerHTML: _vm._s(_vm.selectedPackage.abstract) }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          !_vm.isInstalling
+            ? _c("div", { staticClass: "mb-4 text-xs pt-auto p-4" }, [
+                _c("p", {
+                  domProps: {
+                    innerHTML: _vm._s(_vm.selectedPackage.description_html)
+                  }
+                }),
+                _vm._v(" "),
+                _c("p", {
+                  domProps: {
+                    innerHTML: _vm._s(_vm.selectedPackage.instructions_html)
+                  }
+                })
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.isInstalling
+            ? _c(
+                "div",
+                {
+                  staticClass: "relative overflow-y-scroll h-full w-full bg-90",
+                  staticStyle: { "min-height": "200px" }
+                },
+                [
+                  _c("div", { staticClass: "overflow-y-auto h-full w-full" }, [
+                    _c("pre", {
+                      staticClass:
+                        "p-4 w-full font-mono text-white text-left leading-loose text-sm",
+                      domProps: { innerHTML: _vm._s(_vm.console) }
+                    })
+                  ])
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "bg-white flex text-sm border-t px-6 py-4 items-center sticky pin-b w-full"
+            },
+            [
+              _c(
+                "p",
+                {
+                  staticClass:
+                    "flex-grow text-indigo font-bold no-underline uppercase text-xs hover:text-indigo-dark"
+                },
+                [_vm._v(_vm._s(_vm.selectedPackage.author.name))]
+              ),
+              _vm._v(" "),
+              !_vm.isInstalling
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "mr-2 btn btn-default btn-danger ",
+                      on: { click: _vm.close }
+                    },
+                    [_vm._v("Close\n            ")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.installed
+                ? _c(
+                    "span",
+                    { staticClass: "text-success mt-1 ml-4 font-bold" },
+                    [_vm._v("Installed")]
+                  )
+                : _c(
+                    "button",
+                    {
+                      staticClass:
+                        "btn btn-default btn-primary justify-self-end",
+                      class: { "btn-disabled": _vm.isInstalling },
+                      attrs: { disabled: _vm.isInstalling },
+                      on: {
+                        click: function($event) {
+                          _vm.requestInstallation(_vm.package)
+                        }
+                      }
+                    },
+                    [
+                      _vm.isInstalling &&
+                      _vm.installingPackage ===
+                        _vm.selectedPackage.composer_name
+                        ? _c("loader", { staticClass: "text-60" })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      !_vm.isInstalling ||
+                      _vm.installingPackage !==
+                        _vm.selectedPackage.composer_name
+                        ? _c("span", [_vm._v("Confirm Install")])
+                        : _vm._e()
+                    ],
+                    1
+                  )
+            ]
+          )
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5c5caa72", module.exports)
   }
 }
 
