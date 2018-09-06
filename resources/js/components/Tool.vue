@@ -2,48 +2,60 @@
     <div>
         <heading class="mb-6">Nova Package Installer</heading>
 
-        <input
-                type="text"
-                @input.stop="searchPackages"
-                v-model="searchText"
-                class="mb-4 w-full form-control form-input form-input-bordered"
-                placeholder="Search packages"
-        />
+        <tabs>
+            <tab name="Install Packages">
+                <div class="flex justify-between w-full">
+                    <div class="relative h-9 flex items-center mb-6 w-full">
+                        <icon type="search" class="absolute ml-3 text-70" />
 
-        <div class="flex items-center flex-no-shink flex-wrap -mx-3">
-                <div class="w-1/4 px-3 flex flex-wrap justify-center sm:justify-start" v-for="package in availablePackages">
-                    <div class="flex mb-4 shadow hover:shadow-md h-128 w-full" style="max-width: 380px;">
-                        <div class="flex-1 bg-white text-sm border-solid border-t-4 rounded-sm border-indigo">
-                            <div class="flex flex-row mt-4 px-4 pb-4" style="height: 14em;">
-                                <div class="pb-2">
-                                     <h2 class="text-xl text-grey-darkest mb-2">{{ package.name }}</h2>
-                                    <div class="text-grey-darkest leading-normal mb-4 markdown leading-tight">{{ package.abstract }}</div>
-                                    <button v-if="isInstalled(package)" @click="show(package)" class="text-info mt-3 mb-2 font-bold">View Package Details</button>
+                        <input
+                            class="appearance-none form-control form-input w-search pl-search w-full"
+                            placeholder="Search Packages"
+                            type="search"
+                            @input.stop="searchPackages"
+                            v-model="searchText"
+                        >
+                    </div>
+                </div>
+
+                <div class="flex items-center flex-no-shink flex-wrap -mx-3">
+                        <div class="w-1/4 px-3 flex flex-wrap justify-center sm:justify-start" v-for="package in availablePackages">
+                            <div class="flex mb-4 shadow hover:shadow-md h-128 w-full" style="max-width: 380px;">
+                                <div class="flex-1 bg-white text-sm border-solid border-t-4 rounded-sm border-indigo">
+                                    <div class="flex flex-row mt-4 px-4 pb-4" style="height: 14em;">
+                                        <div class="pb-2">
+                                             <h2 class="text-xl text-grey-darkest mb-2">{{ package.name }}</h2>
+                                            <div class="text-grey-darkest leading-normal mb-4 markdown leading-tight">{{ package.abstract }}</div>
+                                            <button v-if="isInstalled(package)" @click="show(package)" class="text-info mt-3 mb-2 font-bold">View Package Details</button>
+                                        </div>
+                                    </div>
+                                    <div class="bg-grey-lighter flex text-sm border-t px-6 py-4 items-center">
+                                        <p class="flex-grow text-indigo font-bold no-underline uppercase text-xs hover:text-indigo-dark">{{ package.author.name }}</p>
+
+                                        <button v-if="isInstalled(package)"
+                                                @click="show(package)"
+                                                :class="{'btn-disabled': isInstalling}"
+                                                :disabled="isInstalling"
+                                                class="btn btn-default btn-danger justify-self-end">
+                                            <loader v-if="isInstalling && installingPackage === package.composer_name" class="text-60" /> <span v-if="! isInstalling || installingPackage !== package.composer_name ">Remove</span>
+                                        </button>
+                                        <button
+                                                @click="show(package)"
+                                                :class="{'btn-disabled': isInstalling}"
+                                                :disabled="isInstalling"
+                                                class="btn btn-default btn-primary justify-self-end" v-else>
+                                            <loader v-if="isInstalling && installingPackage === package.composer_name" class="text-60" /> <span v-if="! isInstalling || installingPackage !== package.composer_name ">Install</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="bg-grey-lighter flex text-sm border-t px-6 py-4 items-center">
-                                <p class="flex-grow text-indigo font-bold no-underline uppercase text-xs hover:text-indigo-dark">{{ package.author.name }}</p>
-
-                                <button v-if="isInstalled(package)"
-                                        @click="show(package)"
-                                        :class="{'btn-disabled': isInstalling}"
-                                        :disabled="isInstalling"
-                                        class="btn btn-default btn-danger justify-self-end">
-                                    <loader v-if="isInstalling && installingPackage === package.composer_name" class="text-60" /> <span v-if="! isInstalling || installingPackage !== package.composer_name ">Remove</span>
-                                </button>
-                                <button
-                                        @click="show(package)"
-                                        :class="{'btn-disabled': isInstalling}"
-                                        :disabled="isInstalling"
-                                        class="btn btn-default btn-primary justify-self-end" v-else>
-                                    <loader v-if="isInstalling && installingPackage === package.composer_name" class="text-60" /> <span v-if="! isInstalling || installingPackage !== package.composer_name ">Install</span>
-                                </button>
-                            </div>
-                        </div>
                     </div>
-            </div>
-        </div>
-        <InstalledPackages :installedPackages="installedPackages" />
+                </div>
+            </tab>
+            <tab name="Installed Packages">
+                <InstalledPackages :installedPackages="installedPackages" />
+            </tab>
+        </tabs>
 
 
         <portal to="modals">
@@ -67,10 +79,13 @@
 import axios from 'axios';
 import InstalledPackages from './InstalledPackages';
 import PackageModal from './PackageModal';
+import {Tabs, Tab} from 'vue-tabs-component';
 
 export default {
 
     components: {
+        Tabs,
+        Tab,
         InstalledPackages,
         PackageModal
     },
@@ -274,5 +289,95 @@ export default {
 </script>
 
 <style>
-    /* Scoped Styles */
+// Nova Tool CSS
+.tabs-component {
+  margin: 1em 1.5em;
+
+}
+
+.px-6 .tabs-component {
+  margin-left: 0em;
+  margin-right: 0em;
+}
+
+.tabs-component-tabs {
+  border: solid 1px #ddd;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+@media (min-width: 700px) {
+  .tabs-component-tabs {
+    border: 0;
+    align-items: stretch;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: -1px;
+  }
+}
+
+.tabs-component-tab {
+  color: #999;
+  font-size: 14px;
+  font-weight: 600;
+  margin-right: 0;
+  list-style: none;
+}
+
+.tabs-component-tab:not(:last-child) {
+  border-bottom: dotted 1px #ddd;
+}
+
+.tabs-component-tab:hover {
+  color: #666;
+}
+
+.tabs-component-tab.is-active {
+  color: #000;
+}
+
+.tabs-component-tab.is-disabled * {
+  color: #cdcdcd;
+  cursor: not-allowed !important;
+}
+
+@media (min-width: 700px) {
+  .tabs-component-tab {
+    background-color: var(--30);
+    border: solid 1px #ddd;
+    border-radius: 3px 3px 0 0;
+    margin-right: .5em;
+    transform: translateY(2px);
+    transition: transform .3s ease;
+  }
+
+  .tabs-component-tab.is-active {
+    border-bottom: solid 1px  var(--30);
+    z-index: 2;
+    transform: translateY(0);
+  }
+}
+
+.tabs-component-tab-a {
+  align-items: center;
+  color: inherit;
+  display: flex;
+  padding: .75em 1em;
+  text-decoration: none;
+}
+
+.tabs-component-panels {
+  padding: 4em 0;
+}
+
+@media (min-width: 700px) {
+  .tabs-component-panels {
+    border-top-left-radius: 0;
+    background-color: var(--30);
+    border: solid 1px #ddd;
+    border-radius: 0 6px 6px 6px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .05);
+    padding: 4em 2em;
+  }
+}
 </style>
