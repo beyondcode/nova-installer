@@ -45,7 +45,7 @@ class AstStyleManipulator implements Manipulator
 
     public function removeProvider($provider)
     {
-        $this->modifiedFileContents = [str_replace($provider.",\n", "", $this->fileContents)];
+        $this->modifiedFileContents = [str_replace($provider.",\n", '', $this->fileContents)];
     }
 
     public function isInstalled($classname)
