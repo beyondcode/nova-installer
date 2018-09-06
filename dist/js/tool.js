@@ -802,7 +802,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Scoped Styles */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Scoped Styles */\n", ""]);
 
 // exports
 
@@ -909,10 +909,15 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         searchPackages: function searchPackages() {
             var _this2 = this;
 
-            Nova.request().get('/nova-vendor/beyondcode/nova-installer/packages/search?q=' + this.searchText).then(function (_ref) {
-                var data = _ref.data;
+            if (this.searchText.length < 3) {
+                return;
+            }
+            this.debouncer(function () {
+                Nova.request().get('/nova-vendor/beyondcode/nova-installer/packages/search?q=' + _this2.searchText).then(function (_ref) {
+                    var data = _ref.data;
 
-                _this2.availablePackages = data.data;
+                    _this2.availablePackages = data.data;
+                });
             });
         },
         fetchRecent: function () {
@@ -989,8 +994,13 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
             this.startPolling();
         },
+
+
+        debouncer: _.debounce(function (callback) {
+            return callback();
+        }, 500),
+
         show: function show(selectedPackage) {
-            // console.log(selectedPackage)
             this.showingPackage = selectedPackage;
         },
         startPolling: function startPolling() {
@@ -1935,13 +1945,18 @@ var render = function() {
         attrs: { type: "text", placeholder: "Search packages" },
         domProps: { value: _vm.searchText },
         on: {
-          change: _vm.searchPackages,
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+          input: [
+            function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchText = $event.target.value
+            },
+            function($event) {
+              $event.stopPropagation()
+              return _vm.searchPackages($event)
             }
-            _vm.searchText = $event.target.value
-          }
+          ]
         }
       }),
       _vm._v(" "),

@@ -4,7 +4,7 @@
 
         <input
                 type="text"
-                @change="searchPackages"
+                @input.stop="searchPackages"
                 v-model="searchText"
                 class="mb-4 w-full form-control form-input form-input-bordered"
                 placeholder="Search packages"
@@ -81,10 +81,15 @@ export default {
 
     methods: {
         searchPackages() {
-            Nova.request().get(`/nova-vendor/beyondcode/nova-installer/packages/search?q=${this.searchText}`)
-                .then(({data}) => {
-                    this.availablePackages = data.data;
-                });
+            if (this.searchText.length < 3) {
+                return;
+            }
+            this.debouncer(() => {
+                Nova.request().get(`/nova-vendor/beyondcode/nova-installer/packages/search?q=${this.searchText}`)
+                    .then(({data}) => {
+                        this.availablePackages = data.data;
+                    });
+            })
         },
 
         async fetchRecent() {
@@ -112,8 +117,9 @@ export default {
             this.startPolling();
         },
 
+        debouncer: _.debounce(callback => callback(), 500),
+
         show(selectedPackage) {
-            // console.log(selectedPackage)
             this.showingPackage = selectedPackage
         },
 
