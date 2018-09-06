@@ -28,7 +28,7 @@
                                         @click="show(package)"
                                         :class="{'btn-disabled': isInstalling}"
                                         :disabled="isInstalling"
-                                        class="btn btn-default btn-danger justify-self-end" v-else>
+                                        class="btn btn-default btn-danger justify-self-end">
                                     <loader v-if="isInstalling && installingPackage === package.composer_name" class="text-60" /> <span v-if="! isInstalling || installingPackage !== package.composer_name ">Remove</span>
                                 </button>
                                 <button
@@ -179,7 +179,7 @@ export default {
                         this.$toasted.show(`There was an error when trying to ${this.currentAction} ${this.installingPackage}. Please take a look at your log files.`, { type: 'error', duration: 0 });
 
 
-                    }else{
+                    } else {
                         this.$parent.$refs['nova-installer-navigation'].tools = this.composerStatus.extras.tools;
                         this.$parent.$refs['nova-installer-navigation'].scripts = this.composerStatus.extras.scripts;
                         this.$parent.$refs['nova-installer-navigation'].styles = this.composerStatus.extras.styles;

@@ -34,14 +34,14 @@
                 </button>
 
                 <button v-if="installed"
-                        @click="requestRemoval(package)"
+                        @click="requestRemoval()"
                         :class="{'btn-disabled': isInstalling}"
                         :disabled="isInstalling"
                         class="btn btn-default btn-danger justify-self-end" v-else>
                     <loader v-if="isInstalling && installingPackage === selectedPackage.composer_name" class="text-60" /> <span v-if="! isInstalling || installingPackage !== selectedPackage.composer_name ">Confirm Removal</span>
                 </button>
                 <button
-                        @click="requestInstallation(package)"
+                        @click="requestInstallation()"
                         :class="{'btn-disabled': isInstalling}"
                         :disabled="isInstalling"
                         class="btn btn-default btn-primary justify-self-end" v-else>
@@ -67,7 +67,6 @@ export default {
 
     data() {
         return {
-            console: '',
             hasHadErrors: false
         }
     },
