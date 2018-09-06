@@ -47,7 +47,9 @@
                     :selectedPackage="showingPackage"
                     :isInstalling="isInstalling"
                     :installingPackage="installingPackage"
-                    :console="composerStatus.log"
+                    :console="console"
+                    :hasInstallationErrors="composerStatus.has_errors"
+                    :isInstallationCompleted="composerStatus.finished_installation"
                     :installedPackages="installedPackages"
                 />
             </transition>
@@ -75,7 +77,8 @@ export default {
             showingPackage: null,
             availablePackages: [],
             installedPackages: [],
-            composerStatus: []
+            composerStatus: [],
+            console: '',
         }
     },
 
@@ -143,6 +146,7 @@ export default {
             .then((response) => {
 
                 this.composerStatus = response.data
+                this.console = this.composerStatus.log
 
                 if(this.composerStatus.finished_installation){
 
@@ -161,8 +165,8 @@ export default {
                         this.clearNotificationsAfter(2000)
                         this.$toasted.show(`Successfully installed ${this.installingPackage}.`, { type: 'success' });
 
-                        this.resetComposerStatus();
 
+                        this.fetchInstalled()
                     }
 
 
@@ -170,7 +174,8 @@ export default {
                         this.installingPackage = null;
                         this.stopPolling()
 
-                        this.fetchInstalled()
+                        this.resetComposerStatus();
+
                 }
 
 
@@ -236,6 +241,7 @@ export default {
         this.initialStatusCheck();
 
         Nova.$on('installation-requested', payload => this.installPackage(payload.requestedPackage))
+        Nova.$on('installation-modal-closed', () => this.console = '')
     },
 
     beforeDestroy() {

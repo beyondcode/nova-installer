@@ -1,5 +1,5 @@
 <template>
-    <modal 
+    <modal
         class="modal"
         tabindex="-1"
         role="dialog"
@@ -11,12 +11,12 @@
                     <p v-html="selectedPackage.abstract"></p>
                 </div>
 
-                <div class="mb-4 text-xs pt-auto p-4" v-if="!isInstalling">
+                <div class="mb-4 text-xs pt-auto p-4" v-if="showDescriptions">
                     <p v-html="selectedPackage.description_html"></p>
                     <p v-html="selectedPackage.instructions_html"></p>
                 </div>
 
-                <div class="relative overflow-y-scroll h-full w-full bg-90" v-if="isInstalling" style="min-height: 200px;">
+                <div class="relative overflow-y-scroll h-full w-full bg-90" v-if="showConsole" style="min-height: 200px;" id="console">
                     <div class="overflow-y-auto h-full w-full">
                         <pre
                             v-html="console"
@@ -50,7 +50,15 @@
 
 <script>
 export default {
-    props: ['selectedPackage', 'isInstalling', 'installingPackage', 'console', 'installedPackages'],
+    props: [
+        'selectedPackage',
+        'isInstalling',
+        'installingPackage',
+        'console',
+        'installedPackages',
+        'hasInstallationErrors',
+        'isInstallationCompleted',
+    ],
 
     data() {
         return {
@@ -61,13 +69,28 @@ export default {
     computed: {
         installed() {
             return this.installedPackages.map(function(i) { return i.name; }).includes(this.selectedPackage.composer_name);
+        },
+
+        showConsole() {
+            return this.isInstalling || (this.hasInstallationErrors && this.isInstallationCompleted)
+        },
+
+        showDescriptions() {
+            return ! this.showConsole
         }
     },
 
+    watchers: {
+        console: function(newInput, oldInput){
+            var console = document.getElementById("console");
+            window.scrollTo(0, console.innerHeight);
+        }
+    },
 
     methods: {
         close() {
             this.$emit('close')
+            Nova.$emit('installation-modal-closed')
         },
 
         requestInstallation() {

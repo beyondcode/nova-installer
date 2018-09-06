@@ -1,4 +1,7 @@
 Nova.booting((Vue, router) => {
+
+    Vue.config.devtools = true
+
     Vue.component('nova-installer-navigation', require('./components/Navigation'));
 
     router.addRoutes([
