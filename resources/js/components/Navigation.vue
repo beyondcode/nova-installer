@@ -26,6 +26,16 @@ export default {
                 };
                 document.head.appendChild(script);
             }
+        },
+
+
+        styles(val) {
+            for (let scriptName in val) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = `/nova-api/styles/${scriptName}`;
+                document.head.appendChild(link);
+            }
         }
     },
 

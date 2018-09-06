@@ -37,7 +37,7 @@
                         @click="requestRemoval()"
                         :class="{'btn-disabled': isInstalling}"
                         :disabled="isInstalling"
-                        class="btn btn-default btn-danger justify-self-end" v-else>
+                        class="btn btn-default btn-danger justify-self-end">
                     <loader v-if="isInstalling && installingPackage === selectedPackage.composer_name" class="text-60" /> <span v-if="! isInstalling || installingPackage !== selectedPackage.composer_name ">Confirm Removal</span>
                 </button>
                 <button
