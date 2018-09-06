@@ -1,5 +1,5 @@
 <template>
-    <modal
+    <Modal
         class="modal"
         tabindex="-1"
         role="dialog"
@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import Modal from './Modal';
+
 export default {
     props: [
         'selectedPackage',
@@ -64,6 +66,10 @@ export default {
         'installedPackages',
         'hasInstallationErrors',
     ],
+
+    components: {
+        Modal,
+    },
 
     data() {
         return {

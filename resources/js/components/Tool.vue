@@ -64,7 +64,7 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 import InstalledPackages from './InstalledPackages';
 import PackageModal from './PackageModal';
 
@@ -164,7 +164,7 @@ export default {
 
         status(){
 
-            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status')
+            axios.get('/nova-vendor/beyondcode/nova-installer/composer-status')
             .then((response) => {
 
                 this.composerStatus = response.data
