@@ -8,7 +8,14 @@ use Beyondcode\NovaInstaller\Jobs\InstallPackage;
 
 class InstallerController
 {
-    public function tools()
+    /**
+     * List the tools, scripts and styles available.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function tools(Request $request)
     {
         $tools = [];
 
@@ -22,6 +29,13 @@ class InstallerController
             'styles' => Nova::$styles
         ];
     }
+
+    /**
+     * Start the installation process.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 
     public function install(Request $request)
     {

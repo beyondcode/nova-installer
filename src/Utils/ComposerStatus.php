@@ -2,89 +2,194 @@
 
 namespace Beyondcode\NovaInstaller\Utils;
 
+use Exception;
 use Illuminate\Cache\CacheManager as Cache;
 
 class ComposerStatus
 {
+    /**
+     * Cached object name.
+     *
+     * @var string
+     */
+
+    protected $cacheName = 'nova-installer';
+
+
+    /**
+     * The cache implementation.
+     *
+     * @var \Illuminate\Cache\CacheManager
+     */
+
     protected $cache;
+
+
+    /**
+     * The duration of cache validity.
+     *
+     * @var int
+     */
+
+    protected $duration;
+
+
+    /**
+     * Create a new composert status object.
+     *
+     * @param  \Illuminate\Cache\CacheManage $cache
+     * @return void
+     */
 
     public function __construct(Cache $cache)
     {
         $this->cache = $cache;
+        $this->duration = 10;
     }
+
+
+    /**
+     * Log a message into the status.
+     *
+     * @param  string $message
+     * @return void
+     */
 
     public function log($message = null)
     {
-        $this->cache->put('nova-installer.log', cache('nova-installer.log') . $message, 10);
-
-        return $this->show();
+        $this->set('log', $this->get('log') . $message);
     }
 
-    public function startInstalling($package, $packageName, $key = null)
+
+    /**
+     * Mark the installation process as started.
+     *
+     * @param  string $package
+     * @param  string $packageName
+     * @return void
+     */
+
+    public function startInstalling($package, $packageName)
     {
         $this->reset();
 
-        $this->cache->put('nova-installer.is_running', true, 10);
-        $this->cache->put('nova-installer.has_errors', false, 10);
-        $this->cache->put('nova-installer.finished_installation', false, 10);
-        $this->cache->put('nova-installer.log', null, 10);
-        $this->cache->put('nova-installer.package', $package, 10);
-        $this->cache->put('nova-installer.packageName', $packageName, 10);
-        $this->cache->put('nova-installer.needs_configuration', true, 10);
-
-        return $this->show();
+        $this->set($this->cacheName, [
+            'is_running' => true,
+            'package' => $package,
+            'packageName' => $packageName,
+        ]);
     }
+
+
+    /**
+     * Mark the installation process as started.
+     *
+     * @param  string $package
+     * @param  string $packageName
+     * @return void
+     */
 
     public function finishInstalling($extras = [])
     {
-        $this->cache->put('nova-installer.is_running', false, 10);
-        $this->cache->put('nova-installer.has_errors', false, 10);
-        $this->cache->put('nova-installer.needs_configuration', true, 10);
-        $this->cache->put('nova-installer.extras', $extras, 10);
-        $this->cache->put('nova-installer.finished_installation', true, 10);
-
-        return $this->show();
+        $this->set($this->cacheName, [
+            'is_running' => false,
+            'extras' => $extras,
+            'finished_installation' => true,
+        ]);
     }
 
-    public function terminateForError($e)
+
+    /**
+     * Terminate the installation and log error onto status.
+     *
+     * @param  Exception $e
+     * @return void
+     */
+
+    public function terminateForError(Exception $e)
     {
-        $message = "****** ERROR: " . implode(', ', [
-                    $e->getMessage(),
-                    $e->getFile(),
-                    $e->getLine()]) . "******";
-
         $this->finishInstalling();
-        $this->cache->put('nova-installer.has_errors', true, 10);
-        $this->log($message);
-
-        return $this->show();
+        $this->set('has_errors', true);
+        $this->log($this->formatException($e));
     }
+
+
+    /**
+     * Return the current status of the composer installer.
+     *
+     * @return array
+     */
 
     public function show()
     {
+        // return $this->cache->get($this->cacheName);
         return [
-            'is_running' => $this->cache->get('nova-installer.is_running', false),
-            'has_errors' => $this->cache->get('nova-installer.has_errors', false),
-            'finished_installation' => $this->cache->get('nova-installer.finished_installation', false),
-            'log' => $this->cache->get('nova-installer.log', null),
-            'package' => $this->cache->get('nova-installer.package', null),
-            'packageName' => $this->cache->get('nova-installer.packageName', null),
-            'needs_configuration' => $this->cache->get('nova-installer.needs_configuration', false),
-            'extras' => $this->cache->get('nova-installer.extras', []),
+            'is_running' => $this->get('is_running', false),
+            'has_errors' => $this->get('has_errors', false),
+            'finished_installation' => $this->get('finished_installation', false),
+            'log' => $this->get('log', null),
+            'package' => $this->get('package', null),
+            'packageName' => $this->get('packageName', null),
+            'extras' => $this->get('extras', []),
         ];
     }
 
+
+    /**
+     * Bust the current composer cache.
+     *
+     * @return void
+     */
+
     public function reset()
     {
-        $this->cache->put('nova-installer.is_running', false, 10);
-        $this->cache->put('nova-installer.has_errors', false, 10);
-        $this->cache->put('nova-installer.finished_installation', false, 10);
-        $this->cache->put('nova-installer.package', null, 10);
-        $this->cache->put('nova-installer.packageName', null, 10);
-        $this->cache->put('nova-installer.needs_configuration', false, 10);
-        $this->cache->put('nova-installer.extras', [], 10);
-        $this->cache->put('nova-installer.log', null, 10);
+        $this->cache->flush();
+    }
 
-        return $this->show();
+
+    /**
+     * Create a loggable string from the thrown exception.
+     *
+     * @param  Exception $e
+     * @return string
+     */
+
+    protected function formatException(Exception $e)
+    {
+        return "****** ERROR: " . implode(', ', [$e->getMessage()]) . "******";
+    }
+
+
+    /**
+     * Wrapprer around the cache setter
+     *
+     * @param  string $key
+     * @param  mixed $value
+     * @return void
+     */
+
+    protected function set($key, $value)
+    {
+        if (is_bool($value) || is_string($value)) {
+            $this->cache->put("{$this->cacheName}.{$key}", $value, $this->duration);
+        } elseif (is_array($value)) {
+            foreach ($value as $itemKey => $itemValue) {
+                $this->cache->put("{$this->cacheName}.{$itemKey}", $itemValue, $this->duration);
+            }
+        }
+    }
+
+
+    /**
+     * Wrapprer around the cache getter
+     *
+     * @param  string $key
+     * @param  mixed $default
+     * @return void
+     */
+
+    protected function get($key, $default = null)
+    {
+        return $this->cache->get("{$this->cacheName}.{$key}", $default);
     }
 }

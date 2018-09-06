@@ -12,12 +12,40 @@ use Beyondcode\NovaInstaller\Utils\NovaToolsManager;
 
 class InstallPackage implements ShouldQueue
 {
+    use Dispatchable, InteractsWithQueue, Queueable;
+
+    /**
+     * The composer name of the package.
+     *
+     * @var string
+     */
+
     protected $package;
+
+    /**
+     * The human readable name of the package.
+     *
+     * @var string
+     */
+
     protected $packageName;
+
+    /**
+     * The requesting url.
+     *
+     * @var string
+     */
+
     protected $url;
+
+    /**
+     * The available cookies.
+     *
+     * @var string
+     */
+
     protected $cookies;
 
-    use Dispatchable, InteractsWithQueue, Queueable;
 
     /**
      * Create a new job instance.
@@ -33,7 +61,7 @@ class InstallPackage implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Execute the package installation.
      *
      * @return void
      */
@@ -46,9 +74,13 @@ class InstallPackage implements ShouldQueue
 
             $tools = $toolsManager->getCurrentTools();
 
-            $composer->install($this->package, function ($type, $data) use ($status) {
+            $result = $composer->install($this->package, function ($type, $data) use ($status) {
                 $status->log($data);
             });
+
+            if (! $result) {
+                throw new \Exception("The package could not be installed");
+            }
 
             $status->finishInstalling(
                 $toolsManager->getNewToolsScriptsAndStyles(
