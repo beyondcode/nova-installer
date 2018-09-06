@@ -28,7 +28,7 @@ class AstStyleManipulator implements Manipulator
 
     public function writeFile()
     {
-        file_put_contents($this->reflector->getFileName(), join('', $this->modifiedFileContents));
+        file_put_contents($this->reflector->getFileName(), implode('', $this->modifiedFileContents));
     }
 
     public function installProviderOfType($provider, $type)
@@ -37,9 +37,9 @@ class AstStyleManipulator implements Manipulator
 
         $this->traverseAstWithVisitor();
 
-        $fileAsArray  = file($this->reflector->getFileName());
+        $fileAsArray = file($this->reflector->getFileName());
 
-        array_splice($fileAsArray, $this->visitor->line - 1, 0, str_repeat(" ", 12) . $provider . ",\n");
+        array_splice($fileAsArray, $this->visitor->line - 1, 0, str_repeat(' ', 12).$provider.",\n");
 
         $this->modifiedFileContents = $fileAsArray;
     }

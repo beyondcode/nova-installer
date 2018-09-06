@@ -32,7 +32,7 @@ class NovaToolsManager
         $tools = [];
 
         collect(Nova::$tools)->map(function ($tool) use (&$tools) {
-            $tools[get_class($tool)] = (string)$tool->renderNavigation();
+            $tools[get_class($tool)] = (string) $tool->renderNavigation();
         });
 
         $this->populateScriptsAndStyles();
@@ -53,7 +53,7 @@ class NovaToolsManager
         return [
             'tools' => collect($updatedTools->tools)->diff($tools)->toArray(),
             'scripts' => collect($updatedTools->scripts)->diff($this->scripts)->toArray(),
-            'styles' => collect($updatedTools->styles)->diff($this->styles)->toArray()
+            'styles' => collect($updatedTools->styles)->diff($this->styles)->toArray(),
         ];
     }
 
@@ -70,7 +70,7 @@ class NovaToolsManager
         $encrypter = app(Encrypter::class);
 
         $client = new Client([
-            'verify' => false
+            'verify' => false,
         ]);
 
         $cookies = collect($cookies)->map(function ($cookie) use ($encrypter) {
@@ -78,7 +78,7 @@ class NovaToolsManager
         })->toArray();
 
         $response = $client->request('GET', url('/nova-vendor/beyondcode/nova-installer/tools'), [
-            'cookies' => CookieJar::fromArray($cookies, $url['host'])
+            'cookies' => CookieJar::fromArray($cookies, $url['host']),
         ]);
 
         return json_decode($response->getBody()->getContents());

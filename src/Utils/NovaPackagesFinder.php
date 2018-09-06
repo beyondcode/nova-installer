@@ -13,7 +13,7 @@ class NovaPackagesFinder
         'version',
         'authors',
         'type',
-        'extra'
+        'extra',
     ];
 
     protected $keyword = 'nova';

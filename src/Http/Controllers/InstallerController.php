@@ -14,19 +14,18 @@ class InstallerController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
     public function tools(Request $request)
     {
         $tools = [];
 
         collect(Nova::$tools)->map(function ($tool) use (&$tools) {
-            $tools[get_class($tool)] = (string)$tool->renderNavigation();
+            $tools[get_class($tool)] = (string) $tool->renderNavigation();
         });
 
         return [
             'tools' => $tools,
             'scripts' => Nova::$scripts,
-            'styles' => Nova::$styles
+            'styles' => Nova::$styles,
         ];
     }
 
@@ -36,7 +35,6 @@ class InstallerController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
     public function install(Request $request)
     {
         dispatch(new InstallPackage(
