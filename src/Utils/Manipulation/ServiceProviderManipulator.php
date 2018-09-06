@@ -19,7 +19,27 @@ class ServiceProviderManipulator
         $this->newPackage = $newPackage;
     }
 
-    public function manipulate($classname)
+    public function addTo($classname)
+    {
+        $installables = $this->getInstallables();
+
+        if (count($installables)) {
+            $this->manipulator->reflect($classname);
+
+            foreach ($installables as $installable) {
+                $this->manipulator->readFile();
+                $this->manipulator->parseAst();
+
+                if (! $this->manipulator->isInstalled($installable['provider'])) {
+                    $this->manipulator->installProviderOfType($installable['provider'], $installable['type']);
+
+                    $this->manipulator->writeFile();
+                }
+            }
+        }
+    }
+
+    public function removeFrom($classname)
     {
         $installables = $this->getInstallables();
 
@@ -29,8 +49,8 @@ class ServiceProviderManipulator
             foreach ($installables as $installable) {
                 $this->manipulator->readFile();
 
-                if (! $this->manipulator->isInstalled($installable['provider'])) {
-                    $this->manipulator->installProviderOfType($installable['provider'], $installable['type']);
+                if ($this->manipulator->isInstalled($installable['provider'])) {
+                    $this->manipulator->removeProvider($installable['provider']);
 
                     $this->manipulator->writeFile();
                 }

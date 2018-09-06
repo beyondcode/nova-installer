@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Beyondcode\NovaInstaller\Utils\ComposerStatus;
 use Beyondcode\NovaInstaller\Utils\NovaToolsManager;
 
-class InstallPackage implements ShouldQueue
+class UpdatePackage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
@@ -69,12 +69,12 @@ class InstallPackage implements ShouldQueue
 
             $tools = $toolsManager->getCurrentTools();
 
-            $result = $composer->install($this->package, function ($type, $data) use ($status) {
+            $result = $composer->update($this->package, function ($type, $data) use ($status) {
                 $status->log($data);
             });
 
             if (! $result) {
-                throw new \Exception('The package could not be installed');
+                throw new \Exception('The package could not be updateed');
             }
 
             $toolsManager->registerTools();

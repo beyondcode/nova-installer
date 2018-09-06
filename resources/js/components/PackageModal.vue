@@ -16,7 +16,7 @@
                     <p v-html="selectedPackage.instructions_html"></p>
                 </div>
 
-                <div class="relative overflow-y-scroll h-full w-full bg-90" v-if="showConsole" style="min-height: 200px;" id="console">
+                <div class="relative overflow-y-scroll h-full w-full bg-90" v-if="showConsole" style="min-height: 200px; max-height: 600px;" id="console">
                     <div class="overflow-y-auto h-full w-full">
                         <pre
                             v-html="console"
@@ -30,10 +30,16 @@
 
                 <button v-if="!isInstalling"
                         @click="close"
-                        class="mr-2 btn btn-default btn-danger ">Close
+                        class="mr-2 btn btn-default btn-warning ">Close
                 </button>
 
-                <span v-if="installed"  class="text-success mt-1 ml-4 font-bold">Installed</span>
+                <button v-if="installed"
+                        @click="requestRemoval(package)"
+                        :class="{'btn-disabled': isInstalling}"
+                        :disabled="isInstalling"
+                        class="btn btn-default btn-danger justify-self-end" v-else>
+                    <loader v-if="isInstalling && installingPackage === selectedPackage.composer_name" class="text-60" /> <span v-if="! isInstalling || installingPackage !== selectedPackage.composer_name ">Confirm Removal</span>
+                </button>
                 <button
                         @click="requestInstallation(package)"
                         :class="{'btn-disabled': isInstalling}"
@@ -99,6 +105,10 @@ export default {
 
         requestInstallation() {
             Nova.$emit('installation-requested', {requestedPackage: this.selectedPackage})
+        },
+
+        requestRemoval() {
+            Nova.$emit('removal-requested', {requestedPackage: this.selectedPackage})
         }
 
     }

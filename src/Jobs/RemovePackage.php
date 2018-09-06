@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Beyondcode\NovaInstaller\Utils\ComposerStatus;
 use Beyondcode\NovaInstaller\Utils\NovaToolsManager;
 
-class InstallPackage implements ShouldQueue
+class RemovePackage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
@@ -69,15 +69,15 @@ class InstallPackage implements ShouldQueue
 
             $tools = $toolsManager->getCurrentTools();
 
-            $result = $composer->install($this->package, function ($type, $data) use ($status) {
+            $toolsManager->unregisterTools();
+
+            $result = $composer->remove($this->package, function ($type, $data) use ($status) {
                 $status->log($data);
             });
 
             if (! $result) {
-                throw new \Exception('The package could not be installed');
+                throw new \Exception('The package could not be removeed');
             }
-
-            $toolsManager->registerTools();
 
             $status->finishInstalling(
                 $toolsManager->getNewToolsScriptsAndStyles(

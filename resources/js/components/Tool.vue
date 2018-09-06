@@ -18,12 +18,19 @@
                                 <div class="pb-2">
                                      <h2 class="text-xl text-grey-darkest mb-2">{{ package.name }}</h2>
                                     <div class="text-grey-darkest leading-normal mb-4 markdown leading-tight">{{ package.abstract }}</div>
+                                    <button v-if="isInstalled(package)" @click="show(package)" class="text-info mt-3 mb-2 font-bold">View Package Details</button>
                                 </div>
                             </div>
                             <div class="bg-grey-lighter flex text-sm border-t px-6 py-4 items-center">
                                 <p class="flex-grow text-indigo font-bold no-underline uppercase text-xs hover:text-indigo-dark">{{ package.author.name }}</p>
 
-                                <span v-if="isInstalled(package)"  class="text-success mt-3 mb-2 font-bold">Installed</span>
+                                <button v-if="isInstalled(package)"
+                                        @click="show(package)"
+                                        :class="{'btn-disabled': isInstalling}"
+                                        :disabled="isInstalling"
+                                        class="btn btn-default btn-danger justify-self-end" v-else>
+                                    <loader v-if="isInstalling && installingPackage === package.composer_name" class="text-60" /> <span v-if="! isInstalling || installingPackage !== package.composer_name ">Remove</span>
+                                </button>
                                 <button
                                         @click="show(package)"
                                         :class="{'btn-disabled': isInstalling}"
@@ -78,6 +85,7 @@ export default {
             installedPackages: [],
             composerStatus: [],
             console: '',
+            currentAction: ''
         }
     },
 
@@ -108,10 +116,25 @@ export default {
 
         installPackage(selectedPackage) {
             this.isInstalling = true;
+            this.currentAction = 'install';
             this.installingPackage = selectedPackage.composer_name;
             this.$toasted.show(`Installing "${selectedPackage.name}"`, { type: 'info', duration: 0 });
 
             Nova.request().post('/nova-vendor/beyondcode/nova-installer/install', {
+                package: selectedPackage.composer_name,
+                packageName: selectedPackage.name
+            });
+
+            this.startPolling();
+        },
+
+        removePackage(selectedPackage) {
+            this.isInstalling = true;
+            this.currentAction = 'remove';
+            this.installingPackage = selectedPackage.composer_name;
+            this.$toasted.show(`Removing "${selectedPackage.name}"`, { type: 'info', duration: 0 });
+
+            Nova.request().post('/nova-vendor/beyondcode/nova-installer/remove', {
                 package: selectedPackage.composer_name,
                 packageName: selectedPackage.name
             });
@@ -153,7 +176,7 @@ export default {
                     if(this.composerStatus.has_errors){
 
                         this.clearNotificationsNow();
-                        this.$toasted.show(`There was an error when trying to install ${this.installingPackage}. Please take a look at your log files.`, { type: 'error', duration: 0 });
+                        this.$toasted.show(`There was an error when trying to ${this.currentAction} ${this.installingPackage}. Please take a look at your log files.`, { type: 'error', duration: 0 });
 
 
                     }else{
@@ -162,7 +185,7 @@ export default {
                         this.$parent.$refs['nova-installer-navigation'].styles = this.composerStatus.extras.styles;
 
                         this.clearNotificationsAfter(2000)
-                        this.$toasted.show(`Successfully installed ${this.installingPackage}.`, { type: 'success' });
+                        this.$toasted.show(`Successfully ${this.currentAction}ed ${this.installingPackage}.`, { type: 'success' });
 
 
                         this.fetchInstalled()
@@ -181,7 +204,7 @@ export default {
             }).catch(({error}) => {
                 this.isInstalling = false;
                 this.installingPackage = null;
-                this.$toasted.show(`There was an error when trying to install ${this.installingPackage}. Please take a look at your log files.`, { type: 'error' });
+                this.$toasted.show(`There was an error when trying to ${this.currentAction} ${this.installingPackage}. Please take a look at your log files.`, { type: 'error' });
                 this.stopPolling()
 
                 this.clearNotificationsAfter(2000)
@@ -240,6 +263,7 @@ export default {
         this.initialStatusCheck();
 
         Nova.$on('installation-requested', payload => this.installPackage(payload.requestedPackage))
+        Nova.$on('removal-requested', payload => this.removePackage(payload.requestedPackage))
         Nova.$on('installation-modal-closed', () => this.console = '')
     },
 

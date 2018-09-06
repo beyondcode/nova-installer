@@ -23,7 +23,6 @@ class AstStyleManipulator implements Manipulator
     public function readFile()
     {
         $this->fileContents = file_get_contents($this->reflector->getFileName());
-        $this->parseAst();
     }
 
     public function writeFile()
@@ -42,6 +41,11 @@ class AstStyleManipulator implements Manipulator
         array_splice($fileAsArray, $this->visitor->line - 1, 0, str_repeat(' ', 12).$provider.",\n");
 
         $this->modifiedFileContents = $fileAsArray;
+    }
+
+    public function removeProvider($provider)
+    {
+        $this->modifiedFileContents = [str_replace($provider.",\n", "", $this->fileContents)];
     }
 
     public function isInstalled($classname)

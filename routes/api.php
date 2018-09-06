@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::any('/install', 'InstallerController@install');
+Route::any('/remove', 'InstallerController@remove');
+Route::any('/update', 'InstallerController@update');
+
 Route::get('/tools', 'InstallerController@tools');
 
 Route::get('/composer-status', 'InstallationStatusController@show');

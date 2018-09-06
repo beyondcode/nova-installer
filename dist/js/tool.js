@@ -798,7 +798,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Scoped Styles */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Scoped Styles */\n", ""]);
 
 // exports
 
@@ -819,6 +819,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -898,7 +905,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             availablePackages: [],
             installedPackages: [],
             composerStatus: [],
-            console: ''
+            console: '',
+            currentAction: ''
         };
     },
 
@@ -982,10 +990,24 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
         }(),
         installPackage: function installPackage(selectedPackage) {
             this.isInstalling = true;
+            this.currentAction = 'install';
             this.installingPackage = selectedPackage.composer_name;
             this.$toasted.show('Installing "' + selectedPackage.name + '"', { type: 'info', duration: 0 });
 
             Nova.request().post('/nova-vendor/beyondcode/nova-installer/install', {
+                package: selectedPackage.composer_name,
+                packageName: selectedPackage.name
+            });
+
+            this.startPolling();
+        },
+        removePackage: function removePackage(selectedPackage) {
+            this.isInstalling = true;
+            this.currentAction = 'remove';
+            this.installingPackage = selectedPackage.composer_name;
+            this.$toasted.show('Removing "' + selectedPackage.name + '"', { type: 'info', duration: 0 });
+
+            Nova.request().post('/nova-vendor/beyondcode/nova-installer/remove', {
                 package: selectedPackage.composer_name,
                 packageName: selectedPackage.name
             });
@@ -1028,14 +1050,14 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                     if (_this4.composerStatus.has_errors) {
 
                         _this4.clearNotificationsNow();
-                        _this4.$toasted.show('There was an error when trying to install ' + _this4.installingPackage + '. Please take a look at your log files.', { type: 'error', duration: 0 });
+                        _this4.$toasted.show('There was an error when trying to ' + _this4.currentAction + ' ' + _this4.installingPackage + '. Please take a look at your log files.', { type: 'error', duration: 0 });
                     } else {
                         _this4.$parent.$refs['nova-installer-navigation'].tools = _this4.composerStatus.extras.tools;
                         _this4.$parent.$refs['nova-installer-navigation'].scripts = _this4.composerStatus.extras.scripts;
                         _this4.$parent.$refs['nova-installer-navigation'].styles = _this4.composerStatus.extras.styles;
 
                         _this4.clearNotificationsAfter(2000);
-                        _this4.$toasted.show('Successfully installed ' + _this4.installingPackage + '.', { type: 'success' });
+                        _this4.$toasted.show('Successfully ' + _this4.currentAction + 'ed ' + _this4.installingPackage + '.', { type: 'success' });
 
                         _this4.fetchInstalled();
                     }
@@ -1051,7 +1073,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
                 _this4.isInstalling = false;
                 _this4.installingPackage = null;
-                _this4.$toasted.show('There was an error when trying to install ' + _this4.installingPackage + '. Please take a look at your log files.', { type: 'error' });
+                _this4.$toasted.show('There was an error when trying to ' + _this4.currentAction + ' ' + _this4.installingPackage + '. Please take a look at your log files.', { type: 'error' });
                 _this4.stopPolling();
 
                 _this4.clearNotificationsAfter(2000);
@@ -1108,6 +1130,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
         Nova.$on('installation-requested', function (payload) {
             return _this6.installPackage(payload.requestedPackage);
+        });
+        Nova.$on('removal-requested', function (payload) {
+            return _this6.removePackage(payload.requestedPackage);
         });
         Nova.$on('installation-modal-closed', function () {
             return _this6.console = '';
@@ -2336,6 +2361,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['selectedPackage', 'isInstalling', 'installingPackage', 'console', 'installedPackages', 'hasInstallationErrors'],
@@ -2380,6 +2411,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         requestInstallation: function requestInstallation() {
             Nova.$emit('installation-requested', { requestedPackage: this.selectedPackage });
+        },
+        requestRemoval: function requestRemoval() {
+            Nova.$emit('removal-requested', { requestedPackage: this.selectedPackage });
         }
     }
 });
@@ -2445,7 +2479,7 @@ var render = function() {
                 "div",
                 {
                   staticClass: "relative overflow-y-scroll h-full w-full bg-90",
-                  staticStyle: { "min-height": "200px" },
+                  staticStyle: { "min-height": "200px", "max-height": "600px" },
                   attrs: { id: "console" }
                 },
                 [
@@ -2480,7 +2514,7 @@ var render = function() {
                 ? _c(
                     "button",
                     {
-                      staticClass: "mr-2 btn btn-default btn-danger ",
+                      staticClass: "mr-2 btn btn-default btn-warning ",
                       on: { click: _vm.close }
                     },
                     [_vm._v("Close\n            ")]
@@ -2489,9 +2523,33 @@ var render = function() {
               _vm._v(" "),
               _vm.installed
                 ? _c(
-                    "span",
-                    { staticClass: "text-success mt-1 ml-4 font-bold" },
-                    [_vm._v("Installed")]
+                    "button",
+                    {
+                      directives: [{ name: "else", rawName: "v-else" }],
+                      staticClass:
+                        "btn btn-default btn-danger justify-self-end",
+                      class: { "btn-disabled": _vm.isInstalling },
+                      attrs: { disabled: _vm.isInstalling },
+                      on: {
+                        click: function($event) {
+                          _vm.requestRemoval(_vm.package)
+                        }
+                      }
+                    },
+                    [
+                      _vm.isInstalling &&
+                      _vm.installingPackage ===
+                        _vm.selectedPackage.composer_name
+                        ? _c("loader", { staticClass: "text-60" })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      !_vm.isInstalling ||
+                      _vm.installingPackage !==
+                        _vm.selectedPackage.composer_name
+                        ? _c("span", [_vm._v("Confirm Removal")])
+                        : _vm._e()
+                    ],
+                    1
                   )
                 : _c(
                     "button",
@@ -2627,7 +2685,23 @@ var render = function() {
                                   "text-grey-darkest leading-normal mb-4 markdown leading-tight"
                               },
                               [_vm._v(_vm._s(package.abstract))]
-                            )
+                            ),
+                            _vm._v(" "),
+                            _vm.isInstalled(package)
+                              ? _c(
+                                  "button",
+                                  {
+                                    staticClass:
+                                      "text-info mt-3 mb-2 font-bold",
+                                    on: {
+                                      click: function($event) {
+                                        _vm.show(package)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("View Package Details")]
+                                )
+                              : _vm._e()
                           ])
                         ]
                       ),
@@ -2650,12 +2724,35 @@ var render = function() {
                           _vm._v(" "),
                           _vm.isInstalled(package)
                             ? _c(
-                                "span",
+                                "button",
                                 {
+                                  directives: [
+                                    { name: "else", rawName: "v-else" }
+                                  ],
                                   staticClass:
-                                    "text-success mt-3 mb-2 font-bold"
+                                    "btn btn-default btn-danger justify-self-end",
+                                  class: { "btn-disabled": _vm.isInstalling },
+                                  attrs: { disabled: _vm.isInstalling },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.show(package)
+                                    }
+                                  }
                                 },
-                                [_vm._v("Installed")]
+                                [
+                                  _vm.isInstalling &&
+                                  _vm.installingPackage ===
+                                    package.composer_name
+                                    ? _c("loader", { staticClass: "text-60" })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  !_vm.isInstalling ||
+                                  _vm.installingPackage !==
+                                    package.composer_name
+                                    ? _c("span", [_vm._v("Remove")])
+                                    : _vm._e()
+                                ],
+                                1
                               )
                             : _c(
                                 "button",

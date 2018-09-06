@@ -10,7 +10,7 @@ use Beyondcode\NovaInstaller\Utils\Manipulation\ServiceProviderManipulator;
 
 class NovaToolsManager
 {
-    protected $newPackage;
+    protected $package;
     protected $scripts;
     protected $styles;
     protected $serviceProviderManipulator;
@@ -24,7 +24,7 @@ class NovaToolsManager
 
     public function setPackage($package)
     {
-        $this->newPackage = $package;
+        $this->package = $package;
     }
 
     public function getCurrentTools()
@@ -40,10 +40,18 @@ class NovaToolsManager
         return $tools;
     }
 
-    protected function populateScriptsAndStyles()
+
+
+    public function registerTools()
     {
-        $this->scripts = Nova::$scripts;
-        $this->styles = Nova::$styles;
+        $this->serviceProviderManipulator->setPackage($this->package);
+        $this->serviceProviderManipulator->addTo($this->serviceProvider);
+    }
+
+    public function unregisterTools()
+    {
+        $this->serviceProviderManipulator->setPackage($this->package);
+        $this->serviceProviderManipulator->removeFrom($this->serviceProvider);
     }
 
     public function getNewToolsScriptsAndStyles($url, $cookies, $tools)
@@ -57,16 +65,14 @@ class NovaToolsManager
         ];
     }
 
-    protected function registerTools()
+    protected function populateScriptsAndStyles()
     {
-        $this->serviceProviderManipulator->setPackage($this->newPackage);
-        $this->serviceProviderManipulator->manipulate($this->serviceProvider);
+        $this->scripts = Nova::$scripts;
+        $this->styles = Nova::$styles;
     }
 
     protected function getUpdatedTools($url, $cookies)
     {
-        $this->registerTools();
-
         $encrypter = app(Encrypter::class);
 
         $client = new Client([

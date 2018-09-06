@@ -136,7 +136,7 @@ class ComposerStatus
      */
     protected function formatException(Exception $e)
     {
-        return '<span style="color:red">****** ERROR: '.implode(', ', [$e->getMessage()]).'******</span>';
+        return '<span style="color:red">****** ERROR: '.implode(', ', [$e->getFile(), $e->getLine(), $e->getMessage()]).'******</span>';
     }
 
     /**
