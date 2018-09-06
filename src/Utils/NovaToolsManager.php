@@ -40,8 +40,6 @@ class NovaToolsManager
         return $tools;
     }
 
-
-
     public function registerTools()
     {
         $this->serviceProviderManipulator->setPackage($this->package);
