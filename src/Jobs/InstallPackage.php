@@ -19,7 +19,6 @@ class InstallPackage implements ShouldQueue
      *
      * @var string
      */
-
     protected $package;
 
     /**
@@ -27,7 +26,6 @@ class InstallPackage implements ShouldQueue
      *
      * @var string
      */
-
     protected $packageName;
 
     /**
@@ -35,7 +33,6 @@ class InstallPackage implements ShouldQueue
      *
      * @var string
      */
-
     protected $url;
 
     /**
@@ -43,9 +40,7 @@ class InstallPackage implements ShouldQueue
      *
      * @var string
      */
-
     protected $cookies;
-
 
     /**
      * Create a new job instance.
@@ -79,7 +74,7 @@ class InstallPackage implements ShouldQueue
             });
 
             if (! $result) {
-                throw new \Exception("The package could not be installed");
+                throw new \Exception('The package could not be installed');
             }
 
             $status->finishInstalling(
