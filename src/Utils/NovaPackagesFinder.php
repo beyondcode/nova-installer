@@ -29,7 +29,7 @@ class NovaPackagesFinder
     {
         $packages = [];
 
-        if ($this->manifest->files->exists($path = $this->manifest->vendorPath.'/' . $package . '/composer.json')) {
+        if ($this->manifest->files->exists($path = $this->manifest->vendorPath.'/'.$package.'/composer.json')) {
             $packages = json_decode($this->manifest->files->get($path), true);
         }
 
