@@ -36,7 +36,6 @@ class PackageAction
         $this->url = $url;
         $this->cookies = $cookies;
 
-
         return $this;
     }
 
