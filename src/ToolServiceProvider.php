@@ -5,7 +5,7 @@ namespace Beyondcode\NovaInstaller;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Beyondcode\NovaInstaller\Http\Middleware\Authorize;
-use Beyondcode\NovaInstaller\Console\Commands\NovaPackageDiscoverCommand;
+use Beyondcode\NovaInstaller\Console\Commands\NovaPackageDiscoveryCommand;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -24,7 +24,7 @@ class ToolServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                NovaPackageDiscoverCommand::class,
+                NovaPackageDiscoveryCommand::class,
             ]);
         }
     }

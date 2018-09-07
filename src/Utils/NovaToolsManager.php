@@ -28,6 +28,8 @@ class NovaToolsManager
     public function setPackage($package)
     {
         $this->package = $package;
+
+        return $this;
     }
 
     public function getCurrentTools()

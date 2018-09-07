@@ -7,10 +7,9 @@ use Beyondcode\NovaInstaller\Composer;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Beyondcode\NovaInstaller\Utils\ComposerStatus;
-use Beyondcode\NovaInstaller\Utils\NovaToolsManager;
+use Beyondcode\NovaInstaller\Utils\PackageAction;
 
-class UpdatePackage implements ShouldQueue
+class UpdatePackage implements ShouldQueue, PackageJobInterface
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
@@ -60,34 +59,14 @@ class UpdatePackage implements ShouldQueue
      *
      * @return void
      */
-    public function handle(ComposerStatus $status, NovaToolsManager $toolsManager, Composer $composer)
+    public function handle(PackageAction $action)
     {
-        try {
-            $status->startInstalling($this->package, $this->packageName);
+        $action->setup('update', $this->package, $this->packageName, $this->url, $this->cookies);
 
-            $toolsManager->setPackage($this->package);
-
-            $tools = $toolsManager->getCurrentTools();
-
-            $result = $composer->update($this->package, function ($type, $data) use ($status) {
-                $status->log($data);
-            });
-
-            if (! $result) {
-                throw new \Exception('The package could not be updateed');
-            }
-
+        $action->after(function ($toolsManager) {
             $toolsManager->registerTools();
+        });
 
-            $status->finishInstalling(
-                $toolsManager->getNewToolsScriptsAndStyles(
-                    $this->url,
-                    $this->cookies,
-                    $tools
-                )
-            );
-        } catch (\Exception $e) {
-            $status->terminateForError($e);
-        }
+        $action->run();
     }
 }
