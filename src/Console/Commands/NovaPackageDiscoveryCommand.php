@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Beyondcode\NovaInstaller\Utils\NovaToolsManager;
 use Beyondcode\NovaInstaller\Utils\NovaPackagesFinder;
 
-class NovaPackageDiscoverCommand extends Command
+class NovaPackageDiscoveryCommand extends Command
 {
     /**
      * The console command signature.
