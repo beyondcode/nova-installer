@@ -24,7 +24,7 @@ class ToolServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                NovaPackageDiscoverCommand::class
+                NovaPackageDiscoverCommand::class,
             ]);
         }
     }
