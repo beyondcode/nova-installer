@@ -2,10 +2,12 @@
 
 namespace Beyondcode\NovaInstaller\Utils;
 
-use Composed;
+use Illuminate\Foundation\PackageManifest;
 
 class NovaPackagesFinder
 {
+    protected $manifest;
+
     protected $fields = [
         'name',
         'description',
@@ -16,11 +18,22 @@ class NovaPackagesFinder
         'extra',
     ];
 
+    public function __construct(PackageManifest $manifest)
+    {
+        $this->manifest = $manifest;
+    }
+
     protected $keyword = 'nova';
 
     public function getConfig($package)
     {
-        return collect(optional(Composed\package($package, true))->getConfig());
+        $packages = [];
+
+        if ($this->manifest->files->exists($path = $this->manifest->vendorPath.'/' . $package . '/composer.json')) {
+            $packages = json_decode($this->manifest->files->get($path), true);
+        }
+
+        return collect($packages);
     }
 
     public function all()
@@ -36,12 +49,16 @@ class NovaPackagesFinder
 
     private function getAllInstalledPackages()
     {
-        return collect(Composed\packages());
+        if ($this->manifest->files->exists($path = $this->manifest->vendorPath.'/composer/installed.json')) {
+            $packages = json_decode($this->manifest->files->get($path), true);
+        }
+
+        return collect($packages);
     }
 
     private function extractFieldsOfInterest($package)
     {
-        return collect($package->getConfig())->only($this->fields);
+        return collect($package)->only($this->fields);
     }
 
     public function keepOnlyNovaPackages($package)

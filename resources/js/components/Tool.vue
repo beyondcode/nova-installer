@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import InstalledPackages from './InstalledPackages';
 import PackageModal from './PackageModal';
 import {Tabs, Tab} from 'vue-tabs-component';
@@ -179,7 +178,7 @@ export default {
 
         status(){
 
-            axios.get('/nova-vendor/beyondcode/nova-installer/composer-status')
+            Nova.request().get('/nova-vendor/beyondcode/nova-installer/composer-status')
             .then((response) => {
 
                 this.composerStatus = response.data

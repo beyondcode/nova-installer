@@ -8,10 +8,12 @@ class ServiceProviderManipulator
 {
     protected $newPackage;
     protected $manipulator;
+    protected $finder;
 
-    public function __construct(Manipulator $manipulator)
+    public function __construct(Manipulator $manipulator, NovaPackagesFinder $finder)
     {
         $this->manipulator = $manipulator;
+        $this->finder = $finder;
     }
 
     public function setPackage($newPackage)
@@ -60,7 +62,7 @@ class ServiceProviderManipulator
 
     protected function getInstallables()
     {
-        $newPackageConfig = (new NovaPackagesFinder)->getConfig($this->newPackage);
+        $newPackageConfig = $this->finder->getConfig($this->newPackage);
 
         return (isset($newPackageConfig['extra']['nova']['install'])) ? $newPackageConfig['extra']['nova']['install'] : [];
     }

@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Laravel\Nova\Nova;
 use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Contracts\Encryption\Encrypter;
+use Beyondcode\NovaInstaller\Utils\Manipulation\ManifestManipulator;
 use Beyondcode\NovaInstaller\Utils\Manipulation\ServiceProviderManipulator;
 
 class NovaToolsManager
@@ -14,12 +15,14 @@ class NovaToolsManager
     protected $scripts;
     protected $styles;
     protected $serviceProviderManipulator;
+    protected $manifestManipuator;
 
     protected $serviceProvider = \App\Providers\NovaServiceProvider::class;
 
-    public function __construct(ServiceProviderManipulator $serviceProviderManipulator)
+    public function __construct(ServiceProviderManipulator $serviceProviderManipulator, ManifestManipulator $manifestManipuator)
     {
         $this->serviceProviderManipulator = $serviceProviderManipulator;
+        $this->manifestManipuator = $manifestManipuator;
     }
 
     public function setPackage($package)
@@ -48,6 +51,7 @@ class NovaToolsManager
 
     public function unregisterTools()
     {
+        $this->manifestManipuator->removeFromManifest($this->package);
         $this->serviceProviderManipulator->setPackage($this->package);
         $this->serviceProviderManipulator->removeFrom($this->serviceProvider);
     }
