@@ -1974,7 +1974,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 if (_this4.composerStatus.finished_installation) {
 
                     if (_this4.composerStatus.has_errors) {
-
                         _this4.clearNotificationsNow();
                         _this4.$toasted.show('There was an error when trying to ' + _this4.currentAction + ' ' + _this4.installingPackage + '. Please take a look at your log files.', { type: 'error', duration: 0 });
                     } else {
@@ -16095,7 +16094,12 @@ var render = function() {
           _vm._v(" "),
           _c(
             "tab",
-            { attrs: { name: "Installed Packages" } },
+            {
+              attrs: {
+                name:
+                  "Installed Packages (" + _vm.installedPackages.length + ")"
+              }
+            },
             [
               _c("InstalledPackages", {
                 attrs: { installedPackages: _vm.installedPackages }

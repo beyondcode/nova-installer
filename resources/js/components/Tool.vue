@@ -52,7 +52,7 @@
                     </div>
                 </div>
             </tab>
-            <tab name="Installed Packages">
+            <tab :name="`Installed Packages (${installedPackages.length})`">
                 <InstalledPackages :installedPackages="installedPackages" />
             </tab>
         </tabs>
@@ -189,11 +189,8 @@ export default {
 
 
                     if(this.composerStatus.has_errors){
-
                         this.clearNotificationsNow();
                         this.$toasted.show(`There was an error when trying to ${this.currentAction} ${this.installingPackage}. Please take a look at your log files.`, { type: 'error', duration: 0 });
-
-
                     } else {
                         this.$parent.$refs['nova-installer-navigation'].tools = this.composerStatus.extras.tools;
                         this.$parent.$refs['nova-installer-navigation'].scripts = this.composerStatus.extras.scripts;
