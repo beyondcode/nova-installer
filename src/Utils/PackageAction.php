@@ -4,13 +4,11 @@ namespace Beyondcode\NovaInstaller\Utils;
 
 class PackageAction
 {
-
     /**
      * Type of action to perform.
      *
      * @var string
      */
-
     protected $type;
 
     /**
@@ -18,7 +16,6 @@ class PackageAction
      *
      * @var string
      */
-
     protected $package;
 
     /**
@@ -26,25 +23,20 @@ class PackageAction
      *
      * @var string
      */
-
     protected $packageName;
-
 
     /**
      * Requesting url.
      *
      * @var string
      */
-
     protected $url;
-
 
     /**
      * available cookies.
      *
      * @var string
      */
-
     protected $cookies;
 
     /**
@@ -52,54 +44,42 @@ class PackageAction
      *
      * @var Beyondcode\NovaInstaller\Utils\ComposerStatus
      */
-
     protected $status;
-
 
     /**
      * Tools manager.
      *
      * @var Beyondcode\NovaInstaller\Utils\NovaToolsManager
      */
-
     protected $toolsManager;
-
 
     /**
      * Composer runner.
      *
      * @var Beyondcode\NovaInstaller\Utils\Composer
      */
-
     protected $composer;
-
 
     /**
      * Available tools already registered.
      *
      * @var array
      */
-
     protected $tools;
-
 
     /**
      * Before callable hook.
      *
      * @var callable
      */
-
     protected $beforeCallable;
-
 
     /**
      * After callable hook.
      *
      * @var callable
      */
-
     protected $afterCallable;
-
 
     /**
      * Create a new package action object.
@@ -109,14 +89,12 @@ class PackageAction
      * @param  Beyondcode\NovaInstaller\Utils\Composer $composer
      * @return void
      */
-
     public function __construct(ComposerStatus $status, NovaToolsManager $toolsManager, Composer $composer)
     {
         $this->status = $status;
         $this->toolsManager = $toolsManager;
         $this->composer = $composer;
     }
-
 
     /**
      * Setup the action.
@@ -129,7 +107,6 @@ class PackageAction
      *
      * @return Beyondcode\NovaInstaller\Utils\PackageAction
      */
-
     public function setup($type, $package, $packageName, $url, $cookies)
     {
         $this->type = $type;
@@ -141,13 +118,11 @@ class PackageAction
         return $this;
     }
 
-
     /**
      * Execute the action.
      *
      * @return void
      */
-
     public function run()
     {
         try {
@@ -173,7 +148,6 @@ class PackageAction
         }
     }
 
-
     /**
      * Register the before hook.
      *
@@ -181,14 +155,12 @@ class PackageAction
      *
      * @return void
      */
-
     public function before(callable $before)
     {
         $this->beforeCallable = $before;
 
         return $this;
     }
-
 
     /**
      * Register the after hook.
@@ -197,14 +169,12 @@ class PackageAction
      *
      * @return void
      */
-
     public function after(callable $after)
     {
         $this->afterCallable = $after;
 
         return $this;
     }
-
 
     /**
      * Excecute a given callback and pass through the parameters.
@@ -214,14 +184,12 @@ class PackageAction
      *
      * @return mixed
      */
-
     protected function runCallable(callable $callback = null, ...$args)
     {
         if ($callback) {
             call_user_func($callback, ...$args);
         }
     }
-
 
     /**
      * Fail process with \Exception if $value is not truthy.
@@ -230,7 +198,6 @@ class PackageAction
      *
      * @return mixed
      */
-
     public function throwExceptionIfInvalid($value)
     {
         if (! $value) {
