@@ -17,12 +17,14 @@ class NovaToolsManager
     protected $serviceProviderManipulator;
     protected $manifestManipuator;
 
-    protected $serviceProvider = \App\Providers\NovaServiceProvider::class;
+    protected $serviceProvider;
 
     public function __construct(ServiceProviderManipulator $serviceProviderManipulator, ManifestManipulator $manifestManipuator)
     {
         $this->serviceProviderManipulator = $serviceProviderManipulator;
         $this->manifestManipuator = $manifestManipuator;
+
+        $this->serviceProvider = config('nova-installer.provider');
     }
 
     public function setPackage($package)

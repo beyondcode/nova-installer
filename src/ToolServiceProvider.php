@@ -26,6 +26,10 @@ class ToolServiceProvider extends ServiceProvider
             $this->commands([
                 NovaPackageDiscoveryCommand::class,
             ]);
+
+            $this->publishes([
+                __DIR__.'/../config/config.php' => config_path('nova-installer.php'),
+            ], 'config');
         }
     }
 
@@ -57,5 +61,7 @@ class ToolServiceProvider extends ServiceProvider
             \Beyondcode\NovaInstaller\Utils\Manipulation\Manipulator::class,
             \Beyondcode\NovaInstaller\Utils\Manipulation\Ast\AstStyleManipulator::class
         );
+
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'nova-installer');
     }
 }
