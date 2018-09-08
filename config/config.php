@@ -1,4 +1,5 @@
 <?php
+
 return [
     /*
      * The Nova Service Provider
