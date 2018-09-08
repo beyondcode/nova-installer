@@ -17,43 +17,34 @@ class UpdatePackage implements ShouldQueue, PackageJobInterface
      *
      * @var string
      */
-
     protected $package;
-
 
     /**
      * The human readable name of the package.
      *
      * @var string
      */
-
     protected $packageName;
-
 
     /**
      * The requesting url.
      *
      * @var string
      */
-
     protected $url;
-
 
     /**
      * The available cookies.
      *
      * @var array
      */
-
     protected $cookies;
-
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-
     public function __construct($package, $packageName, $url, $cookies)
     {
         $this->package = $package;
@@ -62,13 +53,11 @@ class UpdatePackage implements ShouldQueue, PackageJobInterface
         $this->cookies = $cookies;
     }
 
-
     /**
      * Execute the package update.
      *
      * @return void
      */
-
     public function handle(PackageAction $action)
     {
         $action->setup(

@@ -7,33 +7,26 @@ use Illuminate\Cache\CacheManager as Cache;
 
 class ComposerStatus
 {
-
     /**
      * Cached object name.
      *
      * @var string
      */
-
     protected $cacheName = 'nova-installer';
-
 
     /**
      * The cache implementation.
      *
      * @var \Illuminate\Cache\CacheManager
      */
-
     protected $cache;
-
 
     /**
      * The duration of cache validity.
      *
      * @var int
      */
-
     protected $duration;
-
 
     /**
      * Create a new composer status object.
@@ -41,13 +34,11 @@ class ComposerStatus
      * @param  \Illuminate\Cache\CacheManage $cache
      * @return void
      */
-
     public function __construct(Cache $cache)
     {
         $this->cache = $cache;
         $this->duration = 10;
     }
-
 
     /**
      * Log a message into the status.
@@ -55,12 +46,10 @@ class ComposerStatus
      * @param  string $message
      * @return void
      */
-
     public function log($message = null)
     {
         $this->set('log', $this->get('log').$message);
     }
-
 
     /**
      * Mark the installation process as started.
@@ -69,7 +58,6 @@ class ComposerStatus
      * @param  string $packageName
      * @return void
      */
-
     public function startInstalling($package, $packageName)
     {
         $this->reset();
@@ -81,7 +69,6 @@ class ComposerStatus
         ]);
     }
 
-
     /**
      * Mark the installation process as started.
      *
@@ -89,7 +76,6 @@ class ComposerStatus
      * @param  string $packageName
      * @return void
      */
-
     public function finishInstalling($extras = [])
     {
         $this->set($this->cacheName, [
@@ -99,14 +85,12 @@ class ComposerStatus
         ]);
     }
 
-
     /**
      * Terminate the installation and log error onto status.
      *
      * @param  Exception $e
      * @return void
      */
-
     public function terminateForError(Exception $e)
     {
         $this->finishInstalling();
@@ -114,13 +98,11 @@ class ComposerStatus
         $this->log($this->formatException($e));
     }
 
-
     /**
      * Return the current status of the composer installer.
      *
      * @return array
      */
-
     public function show()
     {
         return [
@@ -134,13 +116,11 @@ class ComposerStatus
         ];
     }
 
-
     /**
      * Bust the current composer cache.
      *
      * @return array
      */
-
     public function reset()
     {
         $this->cache->flush();
@@ -148,19 +128,16 @@ class ComposerStatus
         return $this->show();
     }
 
-
     /**
      * Create a loggable string from the thrown exception.
      *
      * @param  Exception $e
      * @return string
      */
-
     protected function formatException(Exception $e)
     {
         return '<span style="color:red">****** ERROR: '.implode(', ', [$e->getFile(), $e->getLine(), $e->getMessage()]).'******</span>';
     }
-
 
     /**
      * Wrapper around the cache setter.
@@ -169,7 +146,6 @@ class ComposerStatus
      * @param  mixed $value
      * @return void
      */
-
     protected function set($key, $value)
     {
         if (is_bool($value) || is_string($value)) {
@@ -181,7 +157,6 @@ class ComposerStatus
         }
     }
 
-
     /**
      * Wrapper around the cache getter.
      *
@@ -189,7 +164,6 @@ class ComposerStatus
      * @param  mixed $default
      * @return void
      */
-
     protected function get($key, $default = null)
     {
         return $this->cache->get("{$this->cacheName}.{$key}", $default);

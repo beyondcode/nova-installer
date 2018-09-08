@@ -8,15 +8,12 @@ use Beyondcode\NovaInstaller\Utils\ComposerStatus;
 
 class InstallationStatusController extends Controller
 {
-
     /**
      * The ComposerStatus object.
      *
      * @var \Beyondcode\NovaInstaller\Utils\ComposerStatus
      */
-
     protected $status;
-
 
     /**
      * Create a new controller instance.
@@ -24,12 +21,10 @@ class InstallationStatusController extends Controller
      * @param  \Beyondcode\NovaInstaller\Utils\ComposerStatus  $status
      * @return void
      */
-
     public function __construct(ComposerStatus $status)
     {
         $this->status = $status;
     }
-
 
     /**
      * Show the current status of the action being run.
@@ -37,12 +32,10 @@ class InstallationStatusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
     public function show(Request $request)
     {
         return $this->status->show();
     }
-
 
     /**
      * Reset the status.
@@ -50,7 +43,6 @@ class InstallationStatusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
     public function reset(Request $request)
     {
         return $this->status->reset();

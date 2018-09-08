@@ -13,7 +13,6 @@ class Composer extends BaseComposer
      * @param callable $callback
      * @return bool
      */
-
     public function install($package, callable $callback)
     {
         $this->setWorkingPath(base_path());
@@ -27,7 +26,6 @@ class Composer extends BaseComposer
         return $process->isSuccessful();
     }
 
-
     /**
      * Remove a composer package.
      *
@@ -35,7 +33,6 @@ class Composer extends BaseComposer
      * @param callable $callback
      * @return bool
      */
-
     public function remove($package, callable $callback)
     {
         $this->setWorkingPath(base_path());
@@ -49,7 +46,6 @@ class Composer extends BaseComposer
         return $process->isSuccessful();
     }
 
-
     /**
      * Update a composer package.
      *
@@ -57,7 +53,6 @@ class Composer extends BaseComposer
      * @param callable $callback
      * @return bool
      */
-
     public function update($package, callable $callback)
     {
         $this->setWorkingPath(base_path());
