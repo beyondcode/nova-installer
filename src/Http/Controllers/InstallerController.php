@@ -9,12 +9,74 @@ use Beyondcode\NovaInstaller\Jobs\InstallPackage;
 
 class InstallerController
 {
+
+    /**
+     * Start the installation process.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function install(Request $request)
+    {
+        dispatch(new InstallPackage(
+            $request->package,
+            $request->packageName,
+            parse_url($request->url()),
+            $request->cookies
+        ));
+
+        return response(null, 204);
+    }
+
+
+    /**
+     * Start the removal process.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function remove(Request $request)
+    {
+        dispatch(new RemovePackage(
+            $request->package,
+            $request->packageName,
+            parse_url($request->url()),
+            $request->cookies
+        ));
+
+        return response(null, 204);
+    }
+
+
+    /**
+     * Start the update process.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function update(Request $request)
+    {
+        dispatch(new RemovePackage(
+            $request->package,
+            $request->packageName,
+            parse_url($request->url()),
+            $request->cookies
+        ));
+
+        return response(null, 204);
+    }
+
+
     /**
      * List the tools, scripts and styles available.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function tools(Request $request)
     {
         $tools = [];
@@ -28,59 +90,5 @@ class InstallerController
             'scripts' => Nova::$scripts,
             'styles' => Nova::$styles,
         ];
-    }
-
-    /**
-     * Start the installation process.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function install(Request $request)
-    {
-        dispatch(new InstallPackage(
-            $request->package,
-            $request->packageName,
-            parse_url($request->url()),
-            $request->cookies
-        ));
-
-        return response(null, 204);
-    }
-
-    /**
-     * Start the removal process.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function remove(Request $request)
-    {
-        dispatch(new RemovePackage(
-            $request->package,
-            $request->packageName,
-            parse_url($request->url()),
-            $request->cookies
-        ));
-
-        return response(null, 204);
-    }
-
-    /**
-     * Start the update process.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        dispatch(new RemovePackage(
-            $request->package,
-            $request->packageName,
-            parse_url($request->url()),
-            $request->cookies
-        ));
-
-        return response(null, 204);
     }
 }

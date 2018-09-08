@@ -6,11 +6,11 @@ interface Manipulator
 {
     public function reflect($classname);
 
-    public function readFile();
+    public function isInstalled($provider);
 
-    public function writeFile();
+    public function readFile();
 
     public function installProviderOfType($provider, $type);
 
-    public function isInstalled($provider);
+    public function writeFile();
 }

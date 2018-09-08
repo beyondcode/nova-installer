@@ -6,7 +6,21 @@ use Illuminate\Foundation\PackageManifest;
 
 class NovaPackagesFinder
 {
+
+    /**
+     * Laravel's package manifest.
+     *
+     * @var Illuminate\Foundation\PackageManifest
+     */
+
     protected $manifest;
+
+
+    /**
+     * The fields that will be extracetd from packages.
+     *
+     * @var array
+     */
 
     protected $fields = [
         'name',
@@ -18,23 +32,53 @@ class NovaPackagesFinder
         'extra',
     ];
 
+
+    /**
+     * The matching keyword to parse packages for.
+     *
+     * @var string
+     */
+
+    protected $keyword = 'nova';
+
+
+    /**
+     * Create a new package findder object.
+     *
+     * @param  Illuminate\Foundation\PackageManifest $manifest
+     * @return void
+     */
+
     public function __construct(PackageManifest $manifest)
     {
         $this->manifest = $manifest;
     }
 
-    protected $keyword = 'nova';
+
+    /**
+     * Get configuration object from the composer.json of a given package.
+     *
+     * @param  string $package
+     * @return Illuminate\Support\Collection
+     */
 
     public function getConfig($package)
     {
-        $packages = [];
+        $packageConfig = [];
 
         if ($this->manifest->files->exists($path = $this->manifest->vendorPath.'/'.$package.'/composer.json')) {
-            $packages = json_decode($this->manifest->files->get($path), true);
+            $packageConfig = json_decode($this->manifest->files->get($path), true);
         }
 
-        return collect($packages);
+        return collect($packageConfig);
     }
+
+
+    /**
+     * Return currently installed nova-related packages.
+     *
+     * @return array
+     */
 
     public function all()
     {
@@ -47,8 +91,17 @@ class NovaPackagesFinder
         })->toArray();
     }
 
-    private function getAllInstalledPackages()
+
+    /**
+    * Return currently installed nova-related packages.
+    *
+    * @return Illuminate\Support\Collection
+    */
+
+    protected function getAllInstalledPackages()
     {
+        $packages = [];
+
         if ($this->manifest->files->exists($path = $this->manifest->vendorPath.'/composer/installed.json')) {
             $packages = json_decode($this->manifest->files->get($path), true);
         }
@@ -56,17 +109,37 @@ class NovaPackagesFinder
         return collect($packages);
     }
 
-    private function extractFieldsOfInterest($package)
+
+    /**
+    * Extract only fileds contained in $fields.
+    *
+    * @return Illuminate\Support\Collection
+    */
+
+    protected function extractFieldsOfInterest($package)
     {
         return collect($package)->only($this->fields);
     }
 
-    public function keepOnlyNovaPackages($package)
+
+    /**
+    * Evaluate wether a package contains the required keyword.
+    *
+    * @return bool
+    */
+
+    protected function keepOnlyNovaPackages($package)
     {
         return in_array($this->keyword, ($package['keywords']) ?? []);
     }
 
-    private function compactAuthorNames($package)
+    /**
+    * Compact multiple author names in string format
+    *
+    * @return Illuminate\Support\Collection
+    */
+
+    protected function compactAuthorNames($package)
     {
         if (isset($package['authors'])) {
             $package['authors'] = collect($package['authors'])->map(function ($author) {

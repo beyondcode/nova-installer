@@ -11,12 +11,15 @@ interface PackageJobInterface
      *
      * @return void
      */
+
     public function __construct($package, $packageName, $url, $cookies);
+
 
     /**
      * Execute the package installation.
      *
      * @return void
      */
+
     public function handle(PackageAction $action);
 }

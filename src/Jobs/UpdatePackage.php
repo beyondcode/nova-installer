@@ -3,7 +3,6 @@
 namespace Beyondcode\NovaInstaller\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Beyondcode\NovaInstaller\Composer;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,34 +17,43 @@ class UpdatePackage implements ShouldQueue, PackageJobInterface
      *
      * @var string
      */
+
     protected $package;
+
 
     /**
      * The human readable name of the package.
      *
      * @var string
      */
+
     protected $packageName;
+
 
     /**
      * The requesting url.
      *
      * @var string
      */
+
     protected $url;
+
 
     /**
      * The available cookies.
      *
-     * @var string
+     * @var array
      */
+
     protected $cookies;
+
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
+
     public function __construct($package, $packageName, $url, $cookies)
     {
         $this->package = $package;
@@ -54,19 +62,23 @@ class UpdatePackage implements ShouldQueue, PackageJobInterface
         $this->cookies = $cookies;
     }
 
+
     /**
-     * Execute the package installation.
+     * Execute the package update.
      *
      * @return void
      */
+
     public function handle(PackageAction $action)
     {
-        $action->setup('update', $this->package, $this->packageName, $this->url, $this->cookies);
-
-        $action->after(function ($toolsManager) {
+        $action->setup(
+            'update',
+            $this->package,
+            $this->packageName,
+            $this->url,
+            $this->cookies
+        )->after(function ($toolsManager) {
             $toolsManager->registerTools();
-        });
-
-        $action->run();
+        })->run();
     }
 }
