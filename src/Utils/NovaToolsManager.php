@@ -63,6 +63,7 @@ class NovaToolsManager
     public function __construct(ServiceProviderManipulator $serviceProviderManipulator, ManifestManipulator $manifestManipuator)
     {
         $this->serviceProviderManipulator = $serviceProviderManipulator;
+        
         $this->manifestManipuator = $manifestManipuator;
 
         $this->serviceProvider = config('nova-installer.provider');
@@ -108,6 +109,7 @@ class NovaToolsManager
     public function registerTools()
     {
         $this->serviceProviderManipulator->setPackage($this->package);
+
         $this->serviceProviderManipulator->addTo($this->serviceProvider);
     }
 
@@ -119,7 +121,9 @@ class NovaToolsManager
     public function unregisterTools()
     {
         $this->manifestManipuator->removeFromManifest($this->package);
+
         $this->serviceProviderManipulator->setPackage($this->package);
+
         $this->serviceProviderManipulator->removeFrom($this->serviceProvider);
     }
 
@@ -147,6 +151,7 @@ class NovaToolsManager
     protected function populateScriptsAndStyles()
     {
         $this->scripts = Nova::$scripts;
+
         $this->styles = Nova::$styles;
     }
 
