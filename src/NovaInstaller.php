@@ -15,6 +15,7 @@ class NovaInstaller extends Tool
     public function boot()
     {
         Nova::script('nova-installer', __DIR__.'/../dist/js/tool.js');
+
         Nova::style('nova-installer', __DIR__.'/../dist/css/tool.css');
     }
 
