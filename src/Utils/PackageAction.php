@@ -92,7 +92,9 @@ class PackageAction
     public function __construct(ComposerStatus $status, NovaToolsManager $toolsManager, Composer $composer)
     {
         $this->status = $status;
+
         $this->toolsManager = $toolsManager;
+
         $this->composer = $composer;
     }
 
