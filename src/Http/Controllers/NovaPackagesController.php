@@ -49,6 +49,7 @@ class NovaPackagesController
             'base_uri' => static::API_URL,
             'verify' => false,
         ]);
+        
         $this->finder = $finder;
     }
 
