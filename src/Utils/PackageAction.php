@@ -112,9 +112,13 @@ class PackageAction
     public function setup($type, $package, $packageName, $url, $cookies)
     {
         $this->type = $type;
+
         $this->package = $package;
+
         $this->packageName = $packageName;
+
         $this->url = $url;
+
         $this->cookies = $cookies;
 
         return $this;
