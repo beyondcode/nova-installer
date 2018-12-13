@@ -63,7 +63,7 @@ class NovaToolsManager
     public function __construct(ServiceProviderManipulator $serviceProviderManipulator, ManifestManipulator $manifestManipuator)
     {
         $this->serviceProviderManipulator = $serviceProviderManipulator;
-        
+
         $this->manifestManipuator = $manifestManipuator;
 
         $this->serviceProvider = config('nova-installer.provider');

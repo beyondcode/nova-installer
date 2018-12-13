@@ -24,7 +24,7 @@ class NovaPackageDiscoveryCommand extends Command
 
         foreach ($packages as $package) {
             $toolsManager->setPackage($package['name']);
-            
+
             $toolsManager->registerTools();
 
             $this->line("Discovered Nova Package: <info>{$package['name']}</info>");
