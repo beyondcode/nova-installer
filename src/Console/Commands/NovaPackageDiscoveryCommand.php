@@ -8,18 +8,8 @@ use Beyondcode\NovaInstaller\Utils\NovaPackagesFinder;
 
 class NovaPackageDiscoveryCommand extends Command
 {
-    /**
-     * The console command signature.
-     *
-     * @var string
-     */
     protected $signature = 'nova:discover';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Re-register the Nova Service Provider';
 
     /**
