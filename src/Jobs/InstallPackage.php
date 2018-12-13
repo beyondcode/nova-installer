@@ -48,11 +48,11 @@ class InstallPackage implements ShouldQueue, PackageJobInterface
     public function __construct($package, $packageName, $url, $cookies)
     {
         $this->package = $package;
-        
+
         $this->packageName = $packageName;
-        
+
         $this->url = $url;
-        
+
         $this->cookies = $cookies;
     }
 
